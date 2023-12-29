@@ -16,6 +16,6 @@ cmake ..
 make
 
 cd test
-./test_st
+./test_cnot
 # Pause to keep the terminal open (optional)
 read -p "Press Enter to exit..."

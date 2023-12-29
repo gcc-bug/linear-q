@@ -17,6 +17,9 @@ namespace lq
         Sttree* newNode = new Sttree(value);
         parent->children.push_back(newNode);
     }
+    void insertChild(Sttree* parent, Sttree* child) {
+        parent->children.push_back(child);
+    }
     void traverse(Sttree* root, int depth = 0) {
         if (root == nullptr) return;
         std::cout << std::string(depth, ' ') << root->data << std::endl;
