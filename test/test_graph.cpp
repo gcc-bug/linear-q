@@ -1,4 +1,5 @@
-#include"graph/Graph.cpp"
+#include"graph/graph.hpp"
+using namespace lq;
 int main() {
     Graph g(5);
     g.addEdge(0, 1);

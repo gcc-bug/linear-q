@@ -1,6 +1,8 @@
-#include"graph/Graph.cpp"
+#include"graph/graph.hpp"
 #include <iostream>
 #include <unordered_set>
+
+using namespace lq;
 int main() {
     Graph gridGraph(13); // 12 vertices for the 3x4 grid
 
