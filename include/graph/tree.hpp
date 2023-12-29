@@ -1,5 +1,7 @@
 #include <vector>
 #include <iostream>
+#include <fstream>
+#include <string>
 
 #ifndef ST_TREE_CLASS
 #define ST_TREE_CLASS
@@ -11,6 +13,13 @@ namespace lq
         std::vector<Sttree*> children;
 
         Sttree(int value) : data(value) {}
+
+        void exportToDot(std::ofstream& outfile) {
+            for (auto child : children) {
+                outfile << "    " << data << " -- " << child->data << ";\n";
+                child->exportToDot(outfile);
+            }
+        }
     };
 
     void insertChild(Sttree* parent, int value) {
@@ -26,7 +35,23 @@ namespace lq
         for (auto child : root->children) {
             traverse(child, depth + 1);
         }
-}
+    }
+
+    void exportTreeToDot(Sttree* root, const std::string& filename) {
+        std::ofstream outfile(filename + ".dot");
+        outfile << "graph G {\n";
+
+        if (root != nullptr) {
+            root->exportToDot(outfile);
+        }
+
+        outfile << "}\n";
+        outfile.close();
+
+        std::string command = "dot -Tpng " + filename + ".dot -o " + filename + ".png";
+        system(command.c_str());
+    }
+
 
 } // namespace lq
 

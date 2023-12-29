@@ -17,5 +17,6 @@ int main(){
     insertChild(node8,node11);
 
     traverse(node1);
+    exportTreeToDot(node1,"tree");
     return 0;
 }

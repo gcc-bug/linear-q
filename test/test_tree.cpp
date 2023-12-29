@@ -17,6 +17,7 @@ int main() {
 
     std::cout << "Tree Traversal:" << std::endl;
     traverse(root);
+    exportTreeToDot(root,"tree");
 
     // Remember to free memory, implement and call a tree destructor if necessary
     // For simplicity, it's not included here
