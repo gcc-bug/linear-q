@@ -7,5 +7,5 @@ target_link_libraries(test_st graph_lib)
 add_executable(test_tree test_tree.cpp)
 target_link_libraries(test_tree graph_lib)
 
-add_executable(test_cnot test_cnot.cpp)
-target_link_libraries(test_cnot graph_lib)
+add_executable(test_ro test_ro.cpp)
+target_link_libraries(test_ro graph_lib)
