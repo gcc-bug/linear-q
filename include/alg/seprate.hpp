@@ -13,7 +13,7 @@
 
 namespace lq{
     struct SubTree {
-        int root;
+        Sttree* root;
         std::vector<int> leaves;
     };
 
@@ -29,12 +29,12 @@ namespace lq{
         return nullptr;
     }
 
-    std::map<int,std::vector<int>> findPath(Sttree* root , const std::vector<int> leaves){
-        std::map<int,std::vector<int>> paths;
+    std::vector<std::vector<int>> findPath(const SubTree St){
+        std::vector<std::vector<int>> paths;
         std::queue<std::pair<Sttree*,std::vector<int>>> queue;
 
-        std::vector<int> path = {root->data};
-        queue.push(std::make_pair(root,path));
+        std::vector<int> path = {St.root->data};
+        queue.push(std::make_pair(St.root,path));
         while(!queue.empty()){
             std::pair<Sttree*, std::vector<int>>& frontElement = queue.front();
             Sttree* currentNode = frontElement.first;
@@ -46,14 +46,14 @@ namespace lq{
                 newPath.push_back(u->data);
                 queue.push(std::make_pair(u,newPath));
             }
-            if(std::find(leaves.begin(), leaves.end(), currentNode->data) != leaves.end()){
-                paths[currentNode->data] = path ;
+            if(std::find(St.leaves.begin(), St.leaves.end(), currentNode->data) != St.leaves.end()){
+                paths.push_back(path);
             }
         }
         return paths;
     }
 
-    std::vector<SubTree> SEPARATE(Sttree* TcS, int pivot, std::set<int>& terminals, size_t alg) {
+    std::vector<SubTree> seprate(Sttree* TcS, int pivot, std::set<int>& terminals, size_t alg) {
         // alg tag ={1,2,3} for different stitution of TF, while tag = 4 only for NW
         if(TcS->data != pivot || TcS->children.empty()){
             throw std::invalid_argument("Erruer");
@@ -72,7 +72,7 @@ namespace lq{
 
             root = R.front();
             R.pop();
-            SubTree TrootSroot = {root->data, {} };
+            SubTree TrootSroot = {root, {} };
 
             // Traverse TcS in BFS order and store vertices and edges
             std::queue<Sttree*> queue;

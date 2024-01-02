@@ -1,5 +1,8 @@
 #include "graph/tree.hpp"
-#include "alg/seprate.hpp"
+#include "alg/row-op.hpp"
+#include "xtensor/xarray.hpp"
+#include "xtensor/xio.hpp"
+#include <set>
 #include <string>
 using namespace lq;
 int main(){
@@ -22,15 +25,9 @@ int main(){
     exportTreeToDot(node1,"tree");
 
     std::set<int> terminals = {6,7,11};
-    auto T = SEPARATE(node1,1,terminals,1);
-    for(auto subtree: T){
-        std::cout <<"-------" <<std::endl;
-        std::cout << subtree.root <<": " <<std::endl;
-        for(auto child:subtree.leaves ){
-            std::cout << child << " ";
-        }
-        std::cout << std::endl;
-        
-    }
+
+    xt::xarray<int> A {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    rowOp(A,terminals,node1,1);
+    std::cout << A ;
     return 0;
 }
