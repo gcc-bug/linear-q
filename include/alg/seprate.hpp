@@ -13,8 +13,8 @@
 
 namespace lq{
     struct SubTree {
-        Sttree* root;
-        std::vector<Sttree*> leaves;
+        int root;
+        std::vector<int> leaves;
     };
 
     Sttree* findNode(Sttree* root, const int data) {
@@ -53,27 +53,26 @@ namespace lq{
         return paths;
     }
 
-    std::vector<SubTree> SEPARATE(Sttree* TcS, int pivot, std::set<int>& terminals, int alg) {
-        std::cout << "----------" <<std::endl;
-        traverse(TcS);
-        std::cout << std::endl;
-        
+    std::vector<SubTree> SEPARATE(Sttree* TcS, int pivot, std::set<int>& terminals, size_t alg) {
+        // alg tag ={1,2,3} for different stitution of TF, while tag = 4 only for NW
+        if(TcS->data != pivot || TcS->children.empty()){
+            throw std::invalid_argument("Erruer");
+        }
+
         std::vector<SubTree> T;
-        std::set<int> R = { pivot };
-        int rootData = pivot;
+        std::queue<Sttree*> R;
+        R.push(TcS);
         terminals.erase(pivot);
 
         int item = 10;
-        
+        Sttree* root;
         // Traverse the Steiner tree in breadth-first search order
-        while (!terminals.empty()&&item) {
+        while (!R.empty()&&item) {
             item --;
 
-            Sttree* root = findNode(TcS, rootData);
-            if (root == nullptr) continue;
-
-            std::set<Sttree*> Sroot = { root };
-            SubTree TrootSroot = { root, {} };
+            root = R.front();
+            R.pop();
+            SubTree TrootSroot = {root->data, {} };
 
             // Traverse TcS in BFS order and store vertices and edges
             std::queue<Sttree*> queue;
@@ -82,31 +81,24 @@ namespace lq{
                 Sttree* currentNode = queue.front();
                 queue.pop();
                 for(auto u: currentNode->children){
-                    queue.push(u);
                     if (terminals.find(u->data)!=terminals.end()) {
-                        TrootSroot.leaves.push_back(u);
-                        terminals.erase(u->data);
-                        Sroot.insert(u);
+                        TrootSroot.leaves.push_back(u->data);
                         if(u->children.size()>0){
-                            R.insert(u->data);
+                            R.push(u);
                         }
+                    }
+                    else{
+                        queue.push(u);
                     }
                 }
             }
 
             if (alg == 4) {
+                // TODO: need modify
                 T.push_back(TrootSroot);
             } else {
-                for (Sttree* u : Sroot) {
-                    if (u != root) {
-                        SubTree TuSu = { u, { root } };
-                        T.push_back(TuSu);
-                    }
-                }
+                T.push_back(TrootSroot);
             }
-            R.erase(rootData);
-            if(!R.empty()) rootData = *R.begin();
-            else break; 
         }
 
         return T;

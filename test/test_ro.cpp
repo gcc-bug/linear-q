@@ -25,7 +25,7 @@ int main(){
     auto T = SEPARATE(node1,1,terminals,1);
     for(auto subtree: T){
         std::cout <<"-------" <<std::endl;
-        std::cout <<subtree.root->data <<": " <<std::endl;
+        std::cout << subtree.root <<": " <<std::endl;
         for(auto child:subtree.leaves ){
             std::cout << child << " ";
         }
