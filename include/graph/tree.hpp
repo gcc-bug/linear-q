@@ -52,6 +52,13 @@ namespace lq
         system(command.c_str());
     }
 
+    bool isChild(Sttree* A, Sttree* B){
+        for(auto child: B->children){
+            if(child->data == A->data) return true;
+        }
+        return false;
+    }
+
 
 } // namespace lq
 

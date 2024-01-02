@@ -14,7 +14,7 @@
 namespace lq{
     struct SubTree {
         Sttree* root;
-        std::vector<int> leaves;
+        std::set<int> leaves;
     };
 
     Sttree* findNode(Sttree* root, const int data) {
@@ -28,31 +28,7 @@ namespace lq{
 
         return nullptr;
     }
-
-    std::vector<std::vector<int>> findPath(const SubTree St){
-        std::vector<std::vector<int>> paths;
-        std::queue<std::pair<Sttree*,std::vector<int>>> queue;
-
-        std::vector<int> path = {St.root->data};
-        queue.push(std::make_pair(St.root,path));
-        while(!queue.empty()){
-            std::pair<Sttree*, std::vector<int>>& frontElement = queue.front();
-            Sttree* currentNode = frontElement.first;
-            std::vector<int> path = frontElement.second;
-            queue.pop();
-
-            for(auto u: currentNode->children){
-                std::vector<int> newPath = path;
-                newPath.push_back(u->data);
-                queue.push(std::make_pair(u,newPath));
-            }
-            if(std::find(St.leaves.begin(), St.leaves.end(), currentNode->data) != St.leaves.end()){
-                paths.push_back(path);
-            }
-        }
-        return paths;
-    }
-
+    
     std::vector<SubTree> seprate(Sttree* TcS, int pivot, std::set<int>& terminals, size_t alg) {
         // alg tag ={1,2,3} for different stitution of TF, while tag = 4 only for NW
         if(TcS->data != pivot || TcS->children.empty()){
@@ -82,7 +58,7 @@ namespace lq{
                 queue.pop();
                 for(auto u: currentNode->children){
                     if (terminals.find(u->data)!=terminals.end()) {
-                        TrootSroot.leaves.push_back(u->data);
+                        TrootSroot.leaves.insert(u->data);
                         if(u->children.size()>0){
                             R.push(u);
                         }
