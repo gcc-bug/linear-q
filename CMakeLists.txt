@@ -1,6 +1,24 @@
 cmake_minimum_required(VERSION 3.10) 
 project("linear-q") 
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+message(STATUS "add submodule")
+find_package(xtensor REQUIRED)
+if(NOT xtensor_FOUND)
+    message(FATAL_ERROR "xtensor not found. Please make sure xtensor is installed.")
+else()
+    message(STATUS "xtensor include directories: ${xtensor_INCLUDE_DIRS}")
+endif()
+
+find_package(xtl REQUIRED)
+if(NOT xtl_FOUND)
+    message(FATAL_ERROR "xtl not found. Please make sure xtl is installed.")
+else()
+    message(STATUS "xtl include directories: ${xtl_INCLUDE_DIRS}")
+endif()
+
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 add_subdirectory(include)
