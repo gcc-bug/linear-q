@@ -10,12 +10,12 @@ mkdir build
 cd build
 
 # Run CMake to generate Makefiles
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=Debug ..
 
 # Build your project
 make
 
 cd test
-./test_cnot
+./test_ro
 # Pause to keep the terminal open (optional)
 read -p "Press Enter to exit..."
