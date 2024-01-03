@@ -16,6 +16,6 @@ cmake -DCMAKE_BUILD_TYPE=Debug ..
 make
 
 cd test
-./test_ro
+./test_ls
 # Pause to keep the terminal open (optional)
 read -p "Press Enter to exit..."

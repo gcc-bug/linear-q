@@ -4,6 +4,7 @@ set(TEST_SOURCES
     test_steiner.cpp
     test_tree.cpp
     test_ro.cpp
+    test_ls.cpp
     # Add new test files here
 )
 
