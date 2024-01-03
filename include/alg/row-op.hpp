@@ -27,19 +27,6 @@ namespace lq {
         return gates;
     }
 
-    std::vector<std::string> topDown2(Sttree* root,const std::set<int> leaves){
-        if (root == nullptr) return {};
-        std::vector<std::string> gates, temp;
-
-        for (auto child : root->children) {
-            if(leaves.find(child->data) == leaves.end()){
-                temp = topDown1(child, leaves);
-                gates.insert(gates.end(),temp.begin(),temp.end());
-            }
-        }
-        
-        return gates;
-    }
     std::vector<std::string> bootomUp1(Sttree* root,const std::set<int> leaves){
         if (root == nullptr) return {};
         std::vector<std::string> gates, temp;
@@ -62,6 +49,20 @@ namespace lq {
         for (auto child : root->children) {
             if(leaves.find(child->data) == leaves.end()){
                 gates.push_back("cx q["+std::to_string(root->data)+"] "+" q["+std::to_string(child->data)+"];\n");
+                temp = bootomUp2(child, leaves);
+                gates.insert(gates.end(),temp.begin(),temp.end());
+            }
+        }
+        
+        return gates;
+    }
+
+    std::vector<std::string> topDown2(Sttree* root,const std::set<int> leaves){
+        if (root == nullptr) return {};
+        std::vector<std::string> gates, temp;
+
+        for (auto child : root->children) {
+            if(leaves.find(child->data) == leaves.end()){
                 temp = bootomUp2(child, leaves);
                 gates.insert(gates.end(),temp.begin(),temp.end());
             }
@@ -108,7 +109,7 @@ namespace lq {
             if(alg!=1){
                 // Top-Down-2
                 std::cout << "Top Down 2" << std::endl;
-                temp = bootomUp2(Ts.at(i).root,Ts.at(i).leaves);
+                temp = topDown2(Ts.at(i).root,Ts.at(i).leaves);
                 for(auto item: temp){
                     std::cout << item;
                 }
