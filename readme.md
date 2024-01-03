@@ -10,7 +10,8 @@ Before installation, ensure you have a basic understanding of Linux or Windows c
 <!-- TODO:[Add instructions or examples on how to use the software or run tests.] -->
 
 ## Acknowledgments
-This project is funded by ISCAS [insert link]. We're also grateful for support from the following individuals:
+<!-- This project is funded by ISCAS [insert link].  -->
+We're grateful for support from the following individuals:
 - Hong Xing
 - Chenjian Li
   
