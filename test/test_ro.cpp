@@ -30,7 +30,7 @@ int main(){
                          {1, 1, 1, 1, 0, 0},
                          {0, 1, 0, 1, 0, 1}};
 
-    rowOp(A,terminals,node1,3);
+    rowOp(A,terminals,node1,1);
     std::cout << A ;
     return 0;
 }
