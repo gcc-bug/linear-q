@@ -1,5 +1,5 @@
-#ifndef ROW_OP
-#define ROW_OP
+#ifndef ALG_ROW_OP
+#define ALG_ROW_OP
 
 #include <vector>
 #include <set>
@@ -72,6 +72,7 @@ namespace lq {
     }
 
     xt::xarray<int> mod2add(xt::xarray<int>& A, int row_i, int row_j){
+        // row begin with 1
         row_i --;
         row_j --;
         if (row_i < A.shape()[0] && row_j < A.shape()[0]) {
@@ -138,4 +139,4 @@ namespace lq {
     }
 }
 
-#endif /* ROW_OP */
+#endif /* ALG_ROW_OP */

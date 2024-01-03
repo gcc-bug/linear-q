@@ -1,3 +1,6 @@
+#ifndef Alg_SEP
+#define Alg_SEP
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -7,9 +10,6 @@
 #include <map>
 #include <utility>
 #include "../graph/tree.hpp"
-
-#ifndef Alg_SEP
-#define Alg_SEP
 
 namespace lq{
     struct SubTree {
