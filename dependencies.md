@@ -15,17 +15,18 @@ sudo apt-get install cmake
 
 
 2. **XTL**:
-- Download the latest version from [XTL Releases](https://github.com/xtensor-stack/xtl/releases).
-- Unpack and install:
+- Clone the latest version from the [XTL Git repository](https://github.com/xtensor-stack/xtl).
+- Install using the following commands:
   ```
-  tar -xzvf xtl-0.7.5.tar.gz
-  cd xtl-0.7.5
+  git clone https://github.com/xtensor-stack/xtl
+  cd xtl
+  cmake .
   sudo make install
   ```
 
 3. **XTENSOR**:
-- Download from [XTENSOR Releases](https://github.com/xtensor-stack/xtensor/releases).
-- Install similarly to XTL.
+- Git repository: [XTENSOR Git repository](https://github.com/xtensor-stack/xtensor).
+- Install in a manner similar to XTL
 
 4. **Graphviz**:
 sudo apt-get install graphviz
