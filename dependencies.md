@@ -42,7 +42,6 @@ sudo apt-get install graphviz
   ```
   .\vcpkg install xtl:x64-windows
   .\vcpkg install xtensor:x64-windows
-  .\vcpkg install pybind11:x64-windows
   ```
 - For XTENSOR-Python, follow the Linux pip installation steps.
 
