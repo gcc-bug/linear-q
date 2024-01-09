@@ -6,21 +6,24 @@
 #include <map>
 #include <algorithm>
 #include <unordered_set>
+#include <set>
+#include <optional>
+#include "../Config.hpp"
 
 #ifndef GRAPH_CLASS
 #define GRAPH_CLASS
 namespace lq{
-    class Graph {
+class Graph {
     int numVertices;
-    std::vector<std::list<int>> adjLists;
+    std::map<label,std::list<label>> adjLists;
 
 public:
     // Function to find the minimum spanning tree using Prim's algorithm
     
-    Graph(int vertices) : numVertices(vertices), adjLists(vertices) {}
+    Graph(int numvertices) : numVertices(numvertices) {}
 
-    void addEdge(int src, int dest) {
-        if(src < this->numVertices && dest < this->numVertices ){
+    void addEdge(label src, label dest) {
+        if(this->adjLists.size() <= this->numVertices){
             this->adjLists[src].push_back(dest);
             // For undirected graph, add edge from dest to src as well
             this->adjLists[dest].push_back(src);
@@ -31,55 +34,55 @@ public:
         
     }
 
-    void BFS(const int startVertex) {
-        if(startVertex > this->numVertices || startVertex < 0){
+    void BFS(const label startVertex) {
+        if(this->adjLists.find(startVertex)== this->adjLists.end()){
             throw std::invalid_argument("Erruer");
         }
 
-        std::vector<bool> visited(this->numVertices, false);
-        std::queue<int> queue;
+        std::set<label> visited;
+        std::queue<label> queue;
 
-        visited[startVertex] = true;
+        visited.insert(startVertex);
         queue.push(startVertex);
 
         while (!queue.empty()) {
-            int currentVertex = queue.front();
+            label currentVertex = queue.front();
             queue.pop();
             std::cout << "Visited " << currentVertex << std::endl;
 
             for (auto& adjPair : this->adjLists[currentVertex]) {
-                int adjVertex = adjPair;
-                if (!visited[adjVertex]) {
-                    visited[adjVertex] = true;
+                label adjVertex = adjPair;
+                if (visited.find(adjVertex)==visited.end()) {
+                    visited.insert(adjVertex);
                     queue.push(adjVertex);
                 }
             }
         }
     }
 
-    std::vector<std::vector<int>> BFS(const int startVertex, const std::unordered_set<int> &terminals)
+    std::vector<std::vector<label>> BFS(const label startVertex, const std::unordered_set<label> &terminals)
     {
-        std::vector<bool> visited(numVertices, false), isTerminal(numVertices, false);
-        for (int terminal : terminals) {
-            isTerminal[terminal] = true;
-        }
+        std::set<label> visited;
 
-        std::map<int, int> predecessor;
-        std::queue<int> queue;
-        std::vector<std::vector<int>> paths;
+        std::map<label, label> predecessor;
+        std::queue<label> queue;
+        std::vector<std::vector<label>> paths;
         paths.reserve(terminals.size());
 
-        visited[startVertex] = true;
+        visited.insert(startVertex);
         queue.push(startVertex);
-        predecessor[startVertex] = -1; // Start vertex has no predecessor
+        // predecessor[startVertex] = std::nullopt;
+        // Start vertex has no predecessor
 
         while (!queue.empty()) {
             int vertex = queue.front();
             queue.pop();
 
-            if (isTerminal[vertex]) {
-                std::vector<int> path;
-                for (int v = vertex; v != -1; v = predecessor[v]) {
+            if (terminals.find(vertex)!=terminals.end()) {
+                std::vector<label> path;
+                label v=vertex;
+                while(predecessor.find(v)!= predecessor.end()){
+                    v = predecessor[v];
                     path.push_back(v);
                 }
                 std::reverse(path.begin(), path.end());
@@ -87,8 +90,8 @@ public:
             }
 
             for (int adjVertex : adjLists[vertex]) {
-                if (!visited[adjVertex]) {
-                    visited[adjVertex] = true;
+                if (visited.find(adjVertex) == visited.end()) {
+                    visited.insert(adjVertex);
                     queue.push(adjVertex);
                     predecessor[adjVertex] = vertex;
                 }
@@ -101,12 +104,10 @@ public:
     void exportToDot(const std::string& filename) {
         std::ofstream outfile(filename+".dot");
         outfile << "graph G {\n"; // Use "digraph G {" for directed graphs
-        for (int i = 0; i < this->numVertices; ++i) {
-            for (auto neighbor : this->adjLists[i]) {
-                if(i > neighbor){
-                    outfile << "    " << i << " -- " << neighbor <<";\n";
-
-                }
+        for (auto pair: this->adjLists) {
+            label cur = pair.first;
+            for (auto neighbor : pair.second) {
+                outfile << "    " << cur << " -- " << neighbor <<";\n";
             }
         }
         outfile << "}\n";

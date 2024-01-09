@@ -37,10 +37,10 @@ int main() {
 
     gridGraph.exportToDot("graph");
     
-    int c = 1;
-    std::unordered_set<int> terminals = {6,7,11};
-    std::map<int,std::unordered_set<int>> path_set ;
-    std::unordered_set<int> determined_path_set ;
+    label c = 1;
+    std::unordered_set<label> terminals = {6,7,11};
+    std::map<label,std::unordered_set<label>> path_set ;
+    std::unordered_set<label> determined_path_set ;
 
     while(!terminals.empty()){
         std::cout << "---------------" <<std::endl;

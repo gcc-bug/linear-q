@@ -21,7 +21,7 @@ int main(){
     traverse(node1);
     exportTreeToDot(node1,"tree");
 
-    std::set<int> terminals = {3,4,5};
+    std::set<label> terminals = {3,4,5};
 
     xt::xarray<int> A = {{1, 1, 0, 1, 1, 0},
                          {0, 0, 1, 1, 0, 1},
@@ -31,6 +31,6 @@ int main(){
                          {0, 1, 0, 1, 0, 1}};
 
     rowOp(A,terminals,node1,1);
-    std::cout << A ;
+    std::cout << A << std::endl;
     return 0;
 }

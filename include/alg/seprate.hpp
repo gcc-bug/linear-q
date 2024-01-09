@@ -10,14 +10,15 @@
 #include <map>
 #include <utility>
 #include "../graph/tree.hpp"
+#include "../Config.hpp"
 
 namespace lq{
     struct SubTree {
         Sttree* root;
-        std::set<int> leaves;
+        std::set<label> leaves;
     };
 
-    Sttree* findNode(Sttree* root, const int data) {
+    Sttree* findNode(Sttree* root, const label data) {
         if (root == nullptr) return nullptr;
         if (root->data == data) return root;
 
@@ -29,7 +30,7 @@ namespace lq{
         return nullptr;
     }
     
-    std::vector<SubTree> seprate(Sttree* TcS, int pivot, std::set<int>& terminals, size_t alg) {
+    std::vector<SubTree> seprate(Sttree* TcS, label pivot, std::set<label>& terminals, size_t alg) {
         // alg tag ={1,2,3} for different stitution of TF, while tag = 4 only for NW
         if(TcS->data != pivot || TcS->children.empty()){
             throw std::invalid_argument("Erruer");
@@ -40,12 +41,9 @@ namespace lq{
         R.push(TcS);
         terminals.erase(pivot);
 
-        int item = 10;
         Sttree* root;
         // Traverse the Steiner tree in breadth-first search order
-        while (!R.empty()&&item) {
-            item --;
-
+        while (!R.empty()) {
             root = R.front();
             R.pop();
             SubTree TrootSroot = {root, {} };

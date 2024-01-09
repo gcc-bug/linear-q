@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "../Config.hpp"
 
 #ifndef ST_TREE_CLASS
 #define ST_TREE_CLASS
@@ -9,10 +10,10 @@
 namespace lq
 {
     struct Sttree {
-        int data;
+        label data;
         std::vector<Sttree*> children;
 
-        Sttree(int value) : data(value) {}
+        Sttree(label value) : data(value) {}
 
         void exportToDot(std::ofstream& outfile) {
             for (auto child : children) {
@@ -22,7 +23,7 @@ namespace lq
         }
     };
 
-    void insertChild(Sttree* parent, int value) {
+    void insertChild(Sttree* parent, label value) {
         Sttree* newNode = new Sttree(value);
         parent->children.push_back(newNode);
     }
