@@ -1,103 +1,125 @@
+#ifndef GRAPH_CLASS
+#define GRAPH_CLASS
+
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <list>
 #include <queue>
 #include <map>
+#include <limits>
 #include <algorithm>
 #include <unordered_set>
 #include <set>
 #include <optional>
 #include "../Config.hpp"
 
-#ifndef GRAPH_CLASS
-#define GRAPH_CLASS
 namespace lq{
 class Graph {
-    int numVertices;
+private:
+    std::set<label> vertices;
     std::map<label,std::list<label>> adjLists;
 
 public:
     // Function to find the minimum spanning tree using Prim's algorithm
     
-    Graph(int numvertices) : numVertices(numvertices) {}
+    Graph() {}
+
+    bool inGraph(label vertice){
+        return this->vertices.find(vertice) != this->vertices.end();
+    }
 
     void addEdge(label src, label dest) {
-        if(this->adjLists.size() <= this->numVertices){
-            this->adjLists[src].push_back(dest);
-            // For undirected graph, add edge from dest to src as well
-            this->adjLists[dest].push_back(src);
+        if(!inGraph(src)){
+            std::cout << "new edge: "<< src << std::endl;
+            this->vertices.insert(src);
         }
-        else{
-            throw std::invalid_argument("Erreur de paramètre");
+        if(!inGraph(dest)){
+            std::cout << "new edge: "<< dest << std::endl;
+            this->vertices.insert(dest);
+        }
+        this->adjLists[src].push_back(dest);
+        this->adjLists[dest].push_back(src);
+    }
+
+    std::set<std::pair<label, label>> primMST() {
+        std::set<std::pair<label, label>> mstEdges;
+        std::map<label,int> key;
+        std::map<label,bool> inMST;
+        for(auto vertice:this->vertices){
+            key[vertice] = std::numeric_limits<int>::max();
+            inMST[vertice] = false;
         }
         
+        std::priority_queue<std::pair<label, label>, std::vector<std::pair<label, label>>, std::greater<std::pair<label, label>>> minHeap;
+
+        // Start with the first vertex
+        label start = *this->vertices.begin();
+        minHeap.push({0, start}); // (key, vertex)
+        key[start] = 0;
+
+        while (!minHeap.empty()) {
+            // Extract the vertex with minimum key value
+            label u = minHeap.top().second;
+            minHeap.pop();
+
+            if (inMST[u]) continue; // Skip if the vertex is already in MST
+            inMST[u] = true; // Include vertex in MST
+
+            // Iterate over the adjacent vertices
+            for (auto &i : adjLists[u]) {
+                label v = i;
+                int weight = 1; // Assuming equal weights for simplicity
+
+                // If v is not in MST and weight of (u,v) is smaller than current key of v
+                if (!inMST[v] && weight < key[v]) {
+                    key[v] = weight;
+                    minHeap.push({key[v], v});
+                    mstEdges.insert({u, v});
+                }
+            }
+        }
+
+        return mstEdges;
     }
+    std::set<std::pair<label, label>> reduceMSTToSteinerTree(const std::set<label>& terminals) {
+        std::set<std::pair<label, label>> mstEdges = this->primMST();
+        std::set<std::pair<label, label>> steinerTree;
+        std::map<label, int> degree;
 
-    void BFS(const label startVertex) {
-        if(this->adjLists.find(startVertex)== this->adjLists.end()){
-            throw std::invalid_argument("Erruer");
+        // Count the degree of each node in the MST
+        for (const auto& edge : mstEdges) {
+            degree[edge.first]++;
+            degree[edge.second]++;
         }
 
-        std::set<label> visited;
-        std::queue<label> queue;
+        // Find non-terminal leaf nodes and remove them iteratively
+        bool removed;
+        do {
+            removed = false;
+            for (auto it = degree.begin(); it != degree.end();) {
+                if (it->second == 1 && terminals.find(it->first) == terminals.end()) { // Non-terminal leaf node
+                    // Remove this leaf node
+                    label nodeToRemove = it->first;
+                    it = degree.erase(it);
+                    removed = true;
 
-        visited.insert(startVertex);
-        queue.push(startVertex);
-
-        while (!queue.empty()) {
-            label currentVertex = queue.front();
-            queue.pop();
-            std::cout << "Visited " << currentVertex << std::endl;
-
-            for (auto& adjPair : this->adjLists[currentVertex]) {
-                label adjVertex = adjPair;
-                if (visited.find(adjVertex)==visited.end()) {
-                    visited.insert(adjVertex);
-                    queue.push(adjVertex);
+                    // Find and remove the corresponding edge
+                    for (auto edgeIt = mstEdges.begin(); edgeIt != mstEdges.end(); ) {
+                        if (edgeIt->first == nodeToRemove || edgeIt->second == nodeToRemove) {
+                            degree[edgeIt->first == nodeToRemove ? edgeIt->second : edgeIt->first]--;
+                            edgeIt = mstEdges.erase(edgeIt);
+                        } else {
+                            ++edgeIt;
+                        }
+                    }
+                } else {
+                    ++it;
                 }
             }
-        }
-    }
+        } while (removed);
 
-    std::vector<std::vector<label>> BFS(const label startVertex, const std::unordered_set<label> &terminals)
-    {
-        std::set<label> visited;
-
-        std::map<label, label> predecessor;
-        std::queue<label> queue;
-        std::vector<std::vector<label>> paths;
-        paths.reserve(terminals.size());
-
-        visited.insert(startVertex);
-        queue.push(startVertex);
-        // predecessor[startVertex] = std::nullopt;
-        // Start vertex has no predecessor
-
-        while (!queue.empty()) {
-            int vertex = queue.front();
-            queue.pop();
-
-            if (terminals.find(vertex)!=terminals.end()) {
-                std::vector<label> path;
-                label v=vertex;
-                while(predecessor.find(v)!= predecessor.end()){
-                    v = predecessor[v];
-                    path.push_back(v);
-                }
-                std::reverse(path.begin(), path.end());
-                paths.push_back(std::move(path));
-            }
-
-            for (int adjVertex : adjLists[vertex]) {
-                if (visited.find(adjVertex) == visited.end()) {
-                    visited.insert(adjVertex);
-                    queue.push(adjVertex);
-                    predecessor[adjVertex] = vertex;
-                }
-            }
-        }
-        return paths;
+        return mstEdges; 
     }
 
 

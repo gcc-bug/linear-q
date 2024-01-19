@@ -14,7 +14,7 @@ bool isSubset(const std::unordered_set<T>& setA, const std::unordered_set<T>& Se
 }
 using namespace lq;
 int main() {
-    Graph gridGraph(13); // 12 vertices for the 3x4 grid
+    Graph gridGraph = Graph(); // 12 vertices for the 3x4 grid
 
     gridGraph.addEdge(1, 2);
     gridGraph.addEdge(2, 3);
@@ -37,48 +37,15 @@ int main() {
 
     gridGraph.exportToDot("graph");
     
-    label c = 1;
-    std::unordered_set<label> terminals = {6,7,11};
-    std::map<label,std::unordered_set<label>> path_set ;
-    std::unordered_set<label> determined_path_set ;
-
-    while(!terminals.empty()){
-        std::cout << "---------------" <<std::endl;
-        std::cout << "c:" << c <<std::endl;
-        
-         
-        auto paths = gridGraph.BFS(c,terminals);
-        for(auto path: paths){
-            std::unordered_set<int> temp_set;
-            std::cout << path.at(0) ;
-            for(int i = 1; i < path.size()-1;++i){
-                std::cout << "->" << path.at(i);
-                temp_set.insert(path.at(i));
-            }
-            std::cout << "->" << path.at(path.size()-1) << std::endl;
-            path_set[path.at(path.size()-1)] = temp_set; 
-        }
-        
-        bool iter = false;
-        for(auto path:paths){
-            if(determined_path_set.empty()){
-                c = path.at(path.size()-1);
-                determined_path_set.insert(path_set[c].begin(),path_set[c].end());
-                terminals.erase(c);
-                iter = true;
-                break;
-            }
-            else if(isSubset(path_set[path.at(path.size()-1)],determined_path_set)){
-                c = path.at(path.size()-1);
-                terminals.erase(c);
-                iter = true;
-                break;
-            }
-        }
-        if(!iter){
-            c = paths[0].at(paths[0].size()-1);
-            determined_path_set.insert(path_set[c].begin(),path_set[c].end());
-            terminals.erase(c);
-        }
+    auto edges = gridGraph.primMST();
+    std::cout << "prime tree" << std::endl;
+    for(auto edge:edges){
+        std::cout << edge.first << " "<< edge.second << std::endl;
+    }
+    std::cout << "steniner tree" << std::endl;
+    std::set<label> terminals ={1,6,7,11};
+    auto tree = gridGraph.reduceMSTToSteinerTree(terminals);
+    for(auto edge:tree){
+        std::cout << edge.first << " "<< edge.second << std::endl;
     }
 }
