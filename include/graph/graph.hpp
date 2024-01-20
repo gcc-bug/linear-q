@@ -121,7 +121,48 @@ public:
 
         return mstEdges; 
     }
+    std::vector<label> findPath(const std::set<label> start_vertices,const std::set<label> targe){
+        std::queue<std::pair<label,std::vector<label>>> queue;
+        std::vector<label> path;
 
+        for(auto vertice:start_vertices){
+            queue.push({vertice,{vertice}});
+        }
+        while(!queue.empty()){
+            auto v = queue.front().first;
+            path = queue.front().second;
+            queue.pop();
+            for(auto u:this->adjLists[v]){
+                if(start_vertices.find(u)!=start_vertices.end()) continue;
+                path.push_back(u);
+                if(targe.find(u) != targe.end()) return path;
+                queue.push({u,path});
+                path.pop_back();
+            }
+        }
+        throw std::runtime_error("non path");
+    }
+
+    std::vector<std::vector<label>> findPaths(const label privot, std::set<label> termianls){
+        std::vector<std::vector<label>> Paths;
+        std::vector<label> path;
+        std::set<label> startvertices= {privot};
+        try{
+            while(!termianls.empty()){
+                path = findPath(startvertices,termianls);
+                for(auto u:path){
+                    startvertices.insert(u);
+                }
+                termianls.erase(path.back());
+                Paths.push_back(path);
+            }
+        }
+        catch (const std::runtime_error& e) {
+            std::cerr << "still have terminal " << termianls.size(); 
+            return Paths;
+        }
+        return Paths;
+    }
 
     void exportToDot(const std::string& filename) {
         std::ofstream outfile(filename+".dot");

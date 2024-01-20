@@ -37,15 +37,17 @@ int main() {
 
     gridGraph.exportToDot("graph");
     
-    auto edges = gridGraph.primMST();
-    std::cout << "prime tree" << std::endl;
-    for(auto edge:edges){
-        std::cout << edge.first << " "<< edge.second << std::endl;
-    }
-    std::cout << "steniner tree" << std::endl;
-    std::set<label> terminals ={1,6,7,11};
-    auto tree = gridGraph.reduceMSTToSteinerTree(terminals);
-    for(auto edge:tree){
-        std::cout << edge.first << " "<< edge.second << std::endl;
+    std::set<label> terminals ={6,9,12};
+    // auto tree = gridGraph.reduceMSTToSteinerTree(terminals);
+    // for(auto edge:tree){
+    //     std::cout << edge.first << " "<< edge.second << std::endl;
+    // }
+    auto paths = gridGraph.findPaths(1,terminals);
+    for(auto path:paths){
+        std::cout << "path to "<< path.back() <<std::endl;
+        for(auto v:path){
+            std::cout << v << "->";
+        }
+        std::cout << std::endl;
     }
 }
