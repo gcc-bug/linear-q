@@ -25,7 +25,7 @@ public:
     
     Graph() {}
 
-    bool inGraph(label vertice){
+    inline bool inGraph(label vertice){
         return this->vertices.find(vertice) != this->vertices.end();
     }
 
