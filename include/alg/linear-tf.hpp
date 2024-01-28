@@ -5,7 +5,7 @@
 #include "row-op.hpp"
 
 namespace lq{
-    void linearSynth(xt::xarray<bool> A,const Graph g,const BiMap<label> label2qubit){
+    void linearSynth(xt::xarray<bool> A,const Graph g,const label2qubit label2qubit){
         // add x gate
         int n = A.shape()[0] - 1;
         // for(int qubit =0; qubit < A.shape()[1]; ++qubit){

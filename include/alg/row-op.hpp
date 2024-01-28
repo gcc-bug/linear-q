@@ -83,7 +83,7 @@ namespace lq {
         }
     }
 
-    void rowOp(xt::xarray<bool>& A, std::set<label>& terminals, Sttree* root, const size_t alg, BiMap<label> label2qubit) {
+    void rowOp(xt::xarray<bool>& A, std::set<label>& terminals, Sttree* root, const size_t alg, const label2qubit label2qubit) {
         auto Ts = separate(root,root->data,terminals,alg);
 
         std::vector<std::pair<label,label>> paths;
@@ -95,7 +95,7 @@ namespace lq {
                 for(auto qubits: paths){
                     std::cout << qubits.first << " " << qubits.second << "\n";
                     if(alg != 4){
-                        mod2add(A,label2qubit.getValue(qubits.second),label2qubit.getValue(qubits.first));
+                        mod2add(A,label2qubit.getqubit(qubits.second),label2qubit.getqubit(qubits.first));
                     }
                 }   
             }
@@ -105,7 +105,7 @@ namespace lq {
             for(auto qubits: paths){
                 std::cout << qubits.first << " " << qubits.second << "\n";
                 if(alg != 4){
-                    mod2add(A,label2qubit.getValue(qubits.second),label2qubit.getValue(qubits.first));
+                    mod2add(A,label2qubit.getqubit(qubits.second),label2qubit.getqubit(qubits.first));
                 }
             }
             // Bottom-Up-2
@@ -115,7 +115,7 @@ namespace lq {
             for(auto qubits: paths){
                 std::cout << qubits.first << " " << qubits.second << "\n";
                 if(alg != 4){
-                    mod2add(A,label2qubit.getValue(qubits.second),label2qubit.getValue(qubits.first));
+                    mod2add(A,label2qubit.getqubit(qubits.second),label2qubit.getqubit(qubits.first));
                 }
             }
             if(alg!=1){
@@ -125,13 +125,13 @@ namespace lq {
                 for(auto qubits: paths){
                     std::cout << qubits.first << " " << qubits.second << "\n";
                     if(alg != 4){
-                        mod2add(A,label2qubit.getValue(qubits.second),label2qubit.getValue(qubits.first));
+                        mod2add(A,label2qubit.getqubit(qubits.second),label2qubit.getqubit(qubits.first));
                     }
                 }   
             }
             if(alg==4){
                 for(auto leaf: terminals){
-                    mod2add(A,label2qubit.getValue(root->data),label2qubit.getValue(leaf));
+                    mod2add(A,label2qubit.getqubit(root->data),label2qubit.getqubit(leaf));
                 }
             }
         }
