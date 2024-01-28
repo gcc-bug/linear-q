@@ -41,6 +41,41 @@ public:
         this->adjLists[src].push_back(dest);
         this->adjLists[dest].push_back(src);
     }
+    
+    Graph* clone() const {
+        Graph* newGraph = new Graph();
+
+        // Copy vertices
+        newGraph->vertices = this->vertices;
+
+        // Copy adjacency lists
+        for (const auto& pair : this->adjLists) {
+            newGraph->adjLists[pair.first] = pair.second;
+        }
+
+        return newGraph;
+    }
+
+    // Function to delete a vertex
+
+    void deleteVertex(int vertex) {
+        // Check if the vertex exists
+        if (vertices.find(vertex) == vertices.end()) {
+            return; // Vertex not found
+        }
+
+        // Remove the vertex from the set of vertices
+        vertices.erase(vertex);
+
+        // Remove all edges associated with this vertex
+        adjLists.erase(vertex);
+
+        // Remove the vertex from the adjacency lists of other vertices
+        for (int neighbor : adjLists[vertex]) {
+            adjLists[neighbor].remove(vertex);
+        }
+    }
+
 
     std::set<std::pair<label, label>> primMST() {
         std::set<std::pair<label, label>> mstEdges;
