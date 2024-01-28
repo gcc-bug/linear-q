@@ -58,7 +58,7 @@ public:
 
     // Function to delete a vertex
 
-    void deleteVertex(int vertex) {
+    void deleteVertex(label vertex) {
         // Check if the vertex exists
         if (vertices.find(vertex) == vertices.end()) {
             return; // Vertex not found
@@ -156,7 +156,7 @@ public:
 
         return mstEdges; 
     }
-    std::vector<int> findPath(const std::set<label>& start_vertices, const std::set<label>& target) {
+    std::vector<label> findPath(const std::set<label>& start_vertices, const std::set<label>& targets) {
         std::queue<std::pair<label, std::vector<label>>> queue;
         std::set<std::pair<label, std::vector<label>>> visited;
 
@@ -169,17 +169,17 @@ public:
 
         while (!queue.empty()) {
             auto front = queue.front();
-            int current_vertex = front.first;
-            std::vector<int> path_to_current = front.second;
+            label current_vertex = front.first;
+            auto path_to_current = front.second;
             queue.pop();
 
-            if (target.find(current_vertex) != target.end()) {
+            if (targets.find(current_vertex) != targets.end()) {
                 // Target found, return the path
                 return path_to_current;
             }
 
             for (const auto& adjacent_vertex : neigh[current_vertex]) {
-                std::vector<int> path_to_adjacent = path_to_current;
+                auto path_to_adjacent = path_to_current;
                 path_to_adjacent.push_back(adjacent_vertex);
 
                 if (visited.find({adjacent_vertex, path_to_adjacent}) == visited.end()) {
