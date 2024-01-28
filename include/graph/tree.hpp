@@ -1,11 +1,10 @@
+#ifndef ST_TREE_CLASS
+#define ST_TREE_CLASS
 #include <vector>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include "../Config.hpp"
-
-#ifndef ST_TREE_CLASS
-#define ST_TREE_CLASS
 
 namespace lq
 {

@@ -1,7 +1,7 @@
 #ifndef ALG_LINEAR_SYNTH
 #define ALG_LINEAR_SYNTH
 
-#include "../graph/graph.hpp"
+#include "graph/graph.hpp"
 #include "row-op.hpp"
 
 namespace lq{

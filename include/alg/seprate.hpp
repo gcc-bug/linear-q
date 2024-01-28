@@ -9,7 +9,7 @@
 #include <queue>
 #include <map>
 #include <utility>
-#include "../graph/tree.hpp"
+#include "graph/tree.hpp"
 #include "../Config.hpp"
 
 namespace lq{
