@@ -18,7 +18,7 @@ namespace lq{
 class Graph {
 private:
     std::set<label> vertices;
-    std::map<label,std::list<label>> adjLists;
+    std::map<label,std::set<label>> neigh;
 
 public:
     // Function to find the minimum spanning tree using Prim's algorithm
@@ -38,8 +38,8 @@ public:
             std::cout << "new edge: "<< dest << std::endl;
             this->vertices.insert(dest);
         }
-        this->adjLists[src].push_back(dest);
-        this->adjLists[dest].push_back(src);
+        this->neigh[src].insert(dest);
+        this->neigh[dest].insert(src);
     }
     
     Graph* clone() const {
@@ -49,8 +49,8 @@ public:
         newGraph->vertices = this->vertices;
 
         // Copy adjacency lists
-        for (const auto& pair : this->adjLists) {
-            newGraph->adjLists[pair.first] = pair.second;
+        for (const auto& pair : this->neigh) {
+            newGraph->neigh[pair.first] = pair.second;
         }
 
         return newGraph;
@@ -68,11 +68,11 @@ public:
         vertices.erase(vertex);
 
         // Remove all edges associated with this vertex
-        adjLists.erase(vertex);
+        neigh.erase(vertex);
 
         // Remove the vertex from the adjacency lists of other vertices
-        for (int neighbor : adjLists[vertex]) {
-            adjLists[neighbor].remove(vertex);
+        for (label neighbor : neigh[vertex]) {
+            neigh[neighbor].erase(vertex);
         }
     }
 
@@ -102,7 +102,7 @@ public:
             inMST[u] = true; // Include vertex in MST
 
             // Iterate over the adjacent vertices
-            for (auto &i : adjLists[u]) {
+            for (auto &i : neigh[u]) {
                 label v = i;
                 int weight = 1; // Assuming equal weights for simplicity
 
@@ -178,7 +178,7 @@ public:
                 return path_to_current;
             }
 
-            for (const auto& adjacent_vertex : adjLists[current_vertex]) {
+            for (const auto& adjacent_vertex : neigh[current_vertex]) {
                 std::vector<int> path_to_adjacent = path_to_current;
                 path_to_adjacent.push_back(adjacent_vertex);
 
@@ -216,7 +216,7 @@ public:
     void exportToDot(const std::string& filename) {
         std::ofstream outfile(filename+".dot");
         outfile << "graph G {\n"; // Use "digraph G {" for directed graphs
-        for (auto pair: this->adjLists) {
+        for (auto pair: this->neigh) {
             label cur = pair.first;
             for (auto neighbor : pair.second) {
                 outfile << "    " << cur << " -- " << neighbor <<";\n";
