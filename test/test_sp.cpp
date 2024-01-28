@@ -23,7 +23,7 @@ int main(){
 
     std::set<label> terminals = {3,4,5};
 
-    auto Ts = seprate(node1,1,terminals,1);
+    auto Ts = separate(node1,1,terminals,1);
     for(auto T:Ts){
         std::cout << "\nroot: ";
         std::cout << T.root->data << std::endl;

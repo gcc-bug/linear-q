@@ -25,8 +25,8 @@ public:
     
     Graph() {}
 
-    inline bool inGraph(label vertice){
-        return this->vertices.find(vertice) != this->vertices.end();
+    inline bool inGraph(label verite){
+        return this->vertices.find(verite) != this->vertices.end();
     }
 
     void addEdge(label src, label dest) {
@@ -46,9 +46,9 @@ public:
         std::set<std::pair<label, label>> mstEdges;
         std::map<label,int> key;
         std::map<label,bool> inMST;
-        for(auto vertice:this->vertices){
-            key[vertice] = std::numeric_limits<int>::max();
-            inMST[vertice] = false;
+        for(auto verite:this->vertices){
+            key[verite] = std::numeric_limits<int>::max();
+            inMST[verite] = false;
         }
         
         std::priority_queue<std::pair<label, label>, std::vector<std::pair<label, label>>, std::greater<std::pair<label, label>>> minHeap;
@@ -126,10 +126,10 @@ public:
         std::set<std::pair<label, std::vector<label>>> visited;
 
         // Initialize queue with start vertices
-        for (const auto& vertice : start_vertices) {
-            std::vector<label> initialPath = {vertice};
-            queue.push({vertice, initialPath});
-            visited.insert({vertice, initialPath});
+        for (const auto& verite : start_vertices) {
+            std::vector<label> initialPath = {verite};
+            queue.push({verite, initialPath});
+            visited.insert({verite, initialPath});
         }
 
         while (!queue.empty()) {
@@ -157,22 +157,22 @@ public:
         throw std::runtime_error("No path found");
     }
 
-    std::vector<std::vector<label>> findPaths(const label privot, std::set<label> termianls){
+    std::vector<std::vector<label>> findPaths(const label pivot, std::set<label> terminals){
         std::vector<std::vector<label>> Paths;
         std::vector<label> path;
-        std::set<label> startvertices= {privot};
+        std::set<label> start_vertices= {pivot};
         try{
-            while(!termianls.empty()){
-                path = findPath(startvertices,termianls);
+            while(!terminals.empty()){
+                path = findPath(start_vertices,terminals);
                 for(auto u:path){
-                    startvertices.insert(u);
+                    start_vertices.insert(u);
                 }
-                termianls.erase(path.back());
+                terminals.erase(path.back());
                 Paths.push_back(path);
             }
         }
         catch (const std::runtime_error& e) {
-            std::cerr << "still have terminal " << termianls.size(); 
+            std::cerr << "still have terminal " << terminals.size(); 
             return Paths;
         }
         return Paths;

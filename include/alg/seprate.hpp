@@ -30,8 +30,8 @@ namespace lq{
         return nullptr;
     }
     
-    std::vector<SubTree> seprate(Sttree* TcS, label pivot, std::set<label>& terminals, size_t alg) {
-        // alg tag ={1,2,3} for different stitution of TF, while tag = 4 only for NW
+    std::vector<SubTree> separate(Sttree* TcS, label pivot, std::set<label>& terminals, size_t alg) {
+        // alg tag ={1,2,3} for different situation of TF, while tag = 4 only for NW
         if(TcS->data != pivot || TcS->children.empty()){
             throw std::invalid_argument("Erruer");
         }
@@ -46,7 +46,7 @@ namespace lq{
         while (!R.empty()) {
             root = R.front();
             R.pop();
-            SubTree TrootSroot = {root, {} };
+            SubTree T_rootS_root = {root, {} };
 
             // Traverse TcS in BFS order and store vertices and edges
             std::queue<Sttree*> queue;
@@ -56,7 +56,7 @@ namespace lq{
                 queue.pop();
                 for(auto u: currentNode->children){
                     if (terminals.find(u->data)!=terminals.end()) {
-                        TrootSroot.leaves.insert(u->data);
+                        T_rootS_root.leaves.insert(u->data);
                         if(u->children.size()>0){
                             R.push(u);
                         }
@@ -69,9 +69,9 @@ namespace lq{
 
             if (alg == 4) {
                 // TODO: need modify
-                T.push_back(TrootSroot);
+                T.push_back(T_rootS_root);
             } else {
-                T.push_back(TrootSroot);
+                T.push_back(T_rootS_root);
             }
         }
 

@@ -28,7 +28,7 @@ namespace lq {
         return gates;
     }
 
-    std::vector<std::pair<label,label>> bootomUp1(Sttree* root,const std::set<label> leaves){
+    std::vector<std::pair<label,label>> bottomUp1(Sttree* root,const std::set<label> leaves){
         if (root == nullptr) return {};
         std::vector<std::pair<label,label>> gates, temp;
 
@@ -43,14 +43,14 @@ namespace lq {
     }
 
 
-    std::vector<std::pair<label,label>> bootomUp2(Sttree* root,const std::set<label> leaves){
+    std::vector<std::pair<label,label>> bottomUp2(Sttree* root,const std::set<label> leaves){
         if (root == nullptr) return {};
         std::vector<std::pair<label,label>> gates, temp;
 
         for (auto child : root->children) {
             if(leaves.find(child->data) == leaves.end()){
                 gates.push_back(std::make_pair(root->data,child->data));
-                temp = bootomUp2(child, leaves);
+                temp = bottomUp2(child, leaves);
                 gates.insert(gates.end(),temp.begin(),temp.end());
             }
         }
@@ -64,7 +64,7 @@ namespace lq {
 
         for (auto child : root->children) {
             if(leaves.find(child->data) == leaves.end()){
-                temp = bootomUp2(child, leaves);
+                temp = bottomUp2(child, leaves);
                 gates.insert(gates.end(),temp.begin(),temp.end());
             }
         }
@@ -83,13 +83,13 @@ namespace lq {
     }
 
     void rowOp(xt::xarray<bool>& A, std::set<label>& terminals, Sttree* root, const size_t alg, const std::map<label,int> label2qubit) {
-        auto Ts = seprate(root,root->data,terminals,alg);
+        auto Ts = separate(root,root->data,terminals,alg);
 
         std::vector<std::pair<label,label>> paths;
         for(label i = Ts.size()-1; i>=0; --i){
             if(alg!=1){
-                std::cout << "Bootom Up 1" << std::endl;
-                paths = bootomUp1(Ts.at(i).root,Ts.at(i).leaves);
+                std::cout << "Bottom Up 1" << std::endl;
+                paths = bottomUp1(Ts.at(i).root,Ts.at(i).leaves);
                 std::reverse(paths.begin(),paths.end());
                 for(auto qubits: paths){
                     std::cout << qubits.first << " " << qubits.second << "\n";
@@ -107,9 +107,9 @@ namespace lq {
                     mod2add(A,label2qubit.at(qubits.second),label2qubit.at(qubits.first));
                 }
             }
-            // Bootom-Up-2
-            std::cout << "Bootom up 2" << std::endl;
-            paths = bootomUp2(Ts.at(i).root,Ts.at(i).leaves);
+            // Bottom-Up-2
+            std::cout << "Bottom up 2" << std::endl;
+            paths = bottomUp2(Ts.at(i).root,Ts.at(i).leaves);
             std::reverse(paths.begin(),paths.end());
             for(auto qubits: paths){
                 std::cout << qubits.first << " " << qubits.second << "\n";
