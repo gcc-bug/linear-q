@@ -16,7 +16,7 @@ cmake -DCMAKE_BUILD_TYPE=Debug ..
 make
 
 cd test
-echo "test_steiner:"
+echo "test find steiner tree:"
 ./test_steiner
 echo "test row operation:"
 ./test_ro

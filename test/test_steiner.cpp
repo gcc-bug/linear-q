@@ -42,12 +42,8 @@ int main() {
     // for(auto edge:tree){
     //     std::cout << edge.first << " "<< edge.second << std::endl;
     // }
-    auto paths = gridGraph.findPaths(1,terminals);
-    for(auto path:paths){
-        std::cout << "path to "<< path.back() <<std::endl;
-        for(auto v:path){
-            std::cout << v << "->";
-        }
-        std::cout << std::endl;
-    }
+    auto root = gridGraph.SteinerTree(1,terminals);
+    std::cout << "Tree Traversal:" << std::endl;
+    traverse(root);
+    exportTreeToDot(root,"tree");
 }

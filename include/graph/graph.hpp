@@ -13,6 +13,7 @@
 #include <set>
 #include <optional>
 #include "../Config.hpp"
+#include "tree.hpp"
 
 namespace lq{
 class Graph {
@@ -192,25 +193,32 @@ public:
         throw std::runtime_error("No path found");
     }
 
-    std::vector<std::vector<label>> findPaths(const label pivot, std::set<label> terminals){
-        std::vector<std::vector<label>> Paths;
+    Sttree* SteinerTree(const label pivot, std::set<label> terminals){
         std::vector<label> path;
         std::set<label> start_vertices= {pivot};
+        Sttree* root = new Sttree(pivot);
+        Sttree* current_node;
+        Sttree* next_node;
         try{
             while(!terminals.empty()){
                 path = findPath(start_vertices,terminals);
-                for(auto u:path){
+                current_node = findNode(root,path.front());
+                for(auto it = std::next(path.begin()); it != path.end(); ++it) {
+                    auto u = *it;
                     start_vertices.insert(u);
+
+                    next_node = new Sttree(u);
+                    insertChild(current_node, next_node);
+                    current_node = next_node;
                 }
+
                 terminals.erase(path.back());
-                Paths.push_back(path);
             }
         }
         catch (const std::runtime_error& e) {
-            std::cerr << "still have terminal " << terminals.size(); 
-            return Paths;
+            std::cerr << "still have terminal " << terminals.size();
         }
-        return Paths;
+        return root;
     }
 
     void exportToDot(const std::string& filename) {

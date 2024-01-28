@@ -17,18 +17,6 @@ namespace lq{
         Sttree* root;
         std::set<label> leaves;
     };
-
-    Sttree* findNode(Sttree* root, const label data) {
-        if (root == nullptr) return nullptr;
-        if (root->data == data) return root;
-
-        for (auto child : root->children) {
-            Sttree* result = findNode(child, data);
-            if (result != nullptr) return result;
-        }
-
-        return nullptr;
-    }
     
     std::vector<SubTree> separate(Sttree* TcS, label pivot, std::set<label>& terminals, size_t alg) {
         // alg tag ={1,2,3} for different situation of TF, while tag = 4 only for NW

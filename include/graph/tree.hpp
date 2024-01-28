@@ -59,6 +59,17 @@ namespace lq
         return false;
     }
 
+    Sttree* findNode(Sttree* root, const label data) {
+        if (root == nullptr) return nullptr;
+        if (root->data == data) return root;
+
+        for (auto child : root->children) {
+            Sttree* result = findNode(child, data);
+            if (result != nullptr) return result;
+        }
+
+        return nullptr;
+    }  
 
 } // namespace lq
 
