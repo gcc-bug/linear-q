@@ -121,26 +121,40 @@ public:
 
         return mstEdges; 
     }
-    std::vector<label> findPath(const std::set<label> start_vertices,const std::set<label> targe){
-        std::queue<std::pair<label,std::vector<label>>> queue;
-        std::vector<label> path;
+    std::vector<int> findPath(const std::set<label>& start_vertices, const std::set<label>& target) {
+        std::queue<std::pair<label, std::vector<label>>> queue;
+        std::set<std::pair<label, std::vector<label>>> visited;
 
-        for(auto vertice:start_vertices){
-            queue.push({vertice,{vertice}});
+        // Initialize queue with start vertices
+        for (const auto& vertice : start_vertices) {
+            std::vector<label> initialPath = {vertice};
+            queue.push({vertice, initialPath});
+            visited.insert({vertice, initialPath});
         }
-        while(!queue.empty()){
-            auto v = queue.front().first;
-            path = queue.front().second;
+
+        while (!queue.empty()) {
+            auto front = queue.front();
+            int current_vertex = front.first;
+            std::vector<int> path_to_current = front.second;
             queue.pop();
-            for(auto u:this->adjLists[v]){
-                if(start_vertices.find(u)!=start_vertices.end()) continue;
-                path.push_back(u);
-                if(targe.find(u) != targe.end()) return path;
-                queue.push({u,path});
-                path.pop_back();
+
+            if (target.find(current_vertex) != target.end()) {
+                // Target found, return the path
+                return path_to_current;
+            }
+
+            for (const auto& adjacent_vertex : adjLists[current_vertex]) {
+                std::vector<int> path_to_adjacent = path_to_current;
+                path_to_adjacent.push_back(adjacent_vertex);
+
+                if (visited.find({adjacent_vertex, path_to_adjacent}) == visited.end()) {
+                    queue.push({adjacent_vertex, path_to_adjacent});
+                    visited.insert({adjacent_vertex, path_to_adjacent});
+                }
             }
         }
-        throw std::runtime_error("non path");
+
+        throw std::runtime_error("No path found");
     }
 
     std::vector<std::vector<label>> findPaths(const label privot, std::set<label> termianls){
