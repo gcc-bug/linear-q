@@ -29,7 +29,8 @@ int main(){
                          {1, 1, 0, 1, 0, 0},
                          {1, 1, 1, 1, 0, 0},
                          {0, 1, 0, 1, 0, 1}};
-    std::map<lq::label, int> label2qubit = {{1,0},{2,1},{3,2},{4,3},{5,4},{6,5}};
+    BiMap<label> label2qubit(std::set<label>{1, 2, 3, 4, 5, 6});
+    label2qubit.message();
     rowOp(A,terminals,node1,1,label2qubit);
     std::cout << A << std::endl;
     return 0;

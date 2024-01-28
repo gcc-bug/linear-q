@@ -11,6 +11,7 @@
 #include <string>
 #include "seprate.hpp"
 #include "../Config.hpp"
+#include "Bimap.hpp"
 
 namespace lq {
     std::vector<std::pair<label,label>> topDown1(Sttree* root,const std::set<label> leaves){
@@ -82,7 +83,7 @@ namespace lq {
         }
     }
 
-    void rowOp(xt::xarray<bool>& A, std::set<label>& terminals, Sttree* root, const size_t alg, const std::map<label,int> label2qubit) {
+    void rowOp(xt::xarray<bool>& A, std::set<label>& terminals, Sttree* root, const size_t alg, BiMap<label> label2qubit) {
         auto Ts = separate(root,root->data,terminals,alg);
 
         std::vector<std::pair<label,label>> paths;
@@ -94,7 +95,7 @@ namespace lq {
                 for(auto qubits: paths){
                     std::cout << qubits.first << " " << qubits.second << "\n";
                     if(alg != 4){
-                        mod2add(A,label2qubit.at(qubits.second),label2qubit.at(qubits.first));
+                        mod2add(A,label2qubit.getValue(qubits.second),label2qubit.getValue(qubits.first));
                     }
                 }   
             }
@@ -104,7 +105,7 @@ namespace lq {
             for(auto qubits: paths){
                 std::cout << qubits.first << " " << qubits.second << "\n";
                 if(alg != 4){
-                    mod2add(A,label2qubit.at(qubits.second),label2qubit.at(qubits.first));
+                    mod2add(A,label2qubit.getValue(qubits.second),label2qubit.getValue(qubits.first));
                 }
             }
             // Bottom-Up-2
@@ -114,7 +115,7 @@ namespace lq {
             for(auto qubits: paths){
                 std::cout << qubits.first << " " << qubits.second << "\n";
                 if(alg != 4){
-                    mod2add(A,label2qubit.at(qubits.second),label2qubit.at(qubits.first));
+                    mod2add(A,label2qubit.getValue(qubits.second),label2qubit.getValue(qubits.first));
                 }
             }
             if(alg!=1){
@@ -124,13 +125,13 @@ namespace lq {
                 for(auto qubits: paths){
                     std::cout << qubits.first << " " << qubits.second << "\n";
                     if(alg != 4){
-                        mod2add(A,label2qubit.at(qubits.second),label2qubit.at(qubits.first));
+                        mod2add(A,label2qubit.getValue(qubits.second),label2qubit.getValue(qubits.first));
                     }
                 }   
             }
             if(alg==4){
                 for(auto leaf: terminals){
-                    mod2add(A,label2qubit.at(root->data),label2qubit.at(leaf));
+                    mod2add(A,label2qubit.getValue(root->data),label2qubit.getValue(leaf));
                 }
             }
         }

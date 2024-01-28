@@ -5,16 +5,16 @@
 #include "row-op.hpp"
 
 namespace lq{
-    void linearSynth(xt::xarray<int> A){
+    void linearSynth(xt::xarray<bool> A,const Graph g,const BiMap<label> label2qubit){
         // add x gate
         int n = A.shape()[0] - 1;
-        for(int qubit =0; qubit < A.shape()[1]; ++qubit){
-            if(A(n,qubit)){
-                std::cout << qubit + 1 << " ";
-                A(n,qubit) = 0; 
-            }
-        }
-        std::cout << std::endl;
+        // for(int qubit =0; qubit < A.shape()[1]; ++qubit){
+        //     if(A(n,qubit)){
+        //         std::cout << qubit + 1 << " ";
+        //         A(n,qubit) = 0; 
+        //     }
+        // }
+        // std::cout << std::endl;
 
         // Cloning the graph: Create a duplicate G' of the graph G for manipulation
         for(int col = 0; col < n; ++col){
