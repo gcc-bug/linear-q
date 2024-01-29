@@ -68,15 +68,12 @@ namespace lq{
                 }
             }
             std::cout << std::endl;
-            auto st = g_->SteinerTree(pivot,terminals);
-            traverse(st);
-            std::cout << std::endl;
-
-            // Steiner Tree Construction: (currently commented out)
-            // This section is intended to find a Steiner tree that connects the set of terminal nodes.
-            // The tree minimizes the total length of the paths from each terminal to the root.
-            // rowOp(A,terminals,St,1);
-            rowOp(A,terminals,st,1,label2qubit);
+            if(!terminals.empty()){
+                auto st = g_->SteinerTree(pivot,terminals);
+                traverse(st);
+                std::cout << std::endl;
+                rowOp(A,terminals,st,1,label2qubit);
+            }
             g_->deleteVertex(label2qubit.getlabel(col));
             std::cout << A <<std::endl;
             // After constructing the tree, remove 'col' from G'.
