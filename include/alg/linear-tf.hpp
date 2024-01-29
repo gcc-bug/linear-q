@@ -111,7 +111,7 @@ namespace lq{
             // The tree minimizes the total length of the paths from each terminal to the root.
             // rowOp(A,terminals,St,2);
             std::vector<int> B(n);
-            for(int qubit = col+1; qubit < A.shape()[1]-1; ++qubit){
+            for(int row = col+1; col < A.shape()[1]; ++col){
                 if(terminals.find(col)!=terminals.end()){
                     B.at(col) = col;
                 }
