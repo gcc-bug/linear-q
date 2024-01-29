@@ -18,11 +18,12 @@ namespace lq{
         std::set<label> leaves;
     };
     
-    std::vector<SubTree> separate(Sttree* TcS, label pivot, std::set<label>& terminals, size_t alg) {
+    std::vector<SubTree> separate(Sttree* TcS, std::set<label>& terminals, size_t alg) {
         // alg tag ={1,2,3} for different situation of TF, while tag = 4 only for NW
-        if(TcS->get_data() != pivot || TcS->get_children().empty()){
+        if(TcS->get_children().empty()){
             throw std::invalid_argument("Erruer");
         }
+        label pivot = TcS->get_data();
 
         std::vector<SubTree> T;
         std::queue<Sttree*> R;

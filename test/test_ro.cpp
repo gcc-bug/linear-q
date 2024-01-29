@@ -31,7 +31,8 @@ int main(){
                          {0, 1, 0, 1, 0, 1}};
     label2qubit label2qubit(std::set<label>{1, 2, 3, 4, 5, 6});
     label2qubit.message();
-    rowOp(A,terminals,node1,1,label2qubit);
+    auto Ts = separate(node1,terminals,1);
+    rowOp(A,Ts,1,label2qubit);
     std::cout << A << std::endl;
     return 0;
 }

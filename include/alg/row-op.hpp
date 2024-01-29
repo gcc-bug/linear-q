@@ -86,9 +86,7 @@ namespace lq {
         }
     }
 
-    void rowOp(xt::xarray<bool>& A, std::set<label>& terminals, Sttree* root, const size_t alg, const label2qubit label2qubit) {
-                auto Ts = separate(root,root->get_data(),terminals,alg);
-
+    void rowOp(xt::xarray<bool>& A, std::vector<SubTree>& Ts, int alg,const label2qubit label2qubit) {
         std::vector<std::pair<label,label>> paths;
         for(label i = Ts.size()-1; i>=0; --i){
             if(alg!=1){
@@ -132,11 +130,11 @@ namespace lq {
                     }
                 }   
             }
-            if(alg==4){
-                for(auto leaf: terminals){
-                    mod2add(A,label2qubit.getqubit(root->get_data()),label2qubit.getqubit(leaf));
-                }
-            }
+            // if(alg==4){
+            //     for(auto leaf: terminals){
+            //         mod2add(A,label2qubit.getqubit(root->get_data()),label2qubit.getqubit(leaf));
+            //     }
+            // }
         }
     }
 }

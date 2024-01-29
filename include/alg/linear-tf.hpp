@@ -72,7 +72,8 @@ namespace lq{
                 auto st = g_->SteinerTree(pivot,terminals);
                 st->traverse();
                 std::cout << std::endl;
-                rowOp(A,terminals,st,1,label2qubit);
+                auto Ts = separate(st,terminals,1);
+                rowOp(A,Ts,1,label2qubit);
             }
             g_->deleteVertex(label2qubit.getlabel(col));
             std::cout << A <<std::endl;
@@ -103,7 +104,8 @@ namespace lq{
                 auto st = g_->SteinerTree(pivot,terminals);
                 st->traverse();
                 std::cout << std::endl;
-                rowOp(A,terminals,st,2,label2qubit);
+                auto Ts = separate(st,terminals,2);
+                rowOp(A,Ts,2,label2qubit);
             }
 
             // Steiner Tree Construction: (currently commented out)
