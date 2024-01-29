@@ -70,15 +70,15 @@ public:
             return; // Vertex not found
         }
 
-        // Remove the vertex from the set of vertices
-        vertices.erase(vertex);
-
         // Remove the vertex from the adjacency lists of other vertices
         for (label neighbor : neigh[vertex]) {
             neigh[neighbor].erase(vertex);
         }
         // Remove all edges associated with this vertex
         neigh.erase(vertex);
+        
+        // Remove the vertex from the set of vertices
+        vertices.erase(vertex);
     }
 
 

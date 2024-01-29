@@ -30,7 +30,7 @@ namespace lq{
         }
         std::reverse(path.begin(), path.end());
         for(int i = 0; i < path.size()-1; ++i){
-            std::cout << path[i] <<" " << path[i+1] << std::endl;
+            CNOT(path[i],path[i+1]);
             mod2add(A,label2qubit.getqubit(path[i+1]),label2qubit.getqubit(path[i]));
         }
     }
@@ -81,21 +81,30 @@ namespace lq{
 
 
         A = xt::transpose(A);
+        g_ = g->clone();
         for(int col = 0; col < n; ++col){
             if(!A(col,col)){
-                // Path Finding: Identify a short path to a node 'j' where A(col,j) = 1.
-                // Then, for the path from 'col' to 'j', apply CNOT starting from 'col' and ending at 'j', 
-                // subsequently updating the matrix A accordingly.
+                TransformMatrix(A,g_,label2qubit,col);
+                std::cout<<col<<":\n"<< A << std::endl;
             }
             // find terminals
-            std::set<int> terminals;
-            for(int qubit = col; qubit < n; ++qubit){
-                if(A(col,qubit)){
-                    terminals.insert(qubit+1);
-                    std::cout << col <<" ";
+            label pivot = label2qubit.getlabel(col);
+            std::cout <<"pivot: "<< pivot << std::endl;
+
+            std::set<label> terminals;
+            for(int row = col+1; row < n; ++row){
+                if(A(row,col)){
+                    terminals.insert(label2qubit.getlabel(row));
+                    std::cout << label2qubit.getlabel(row) <<" ";
                 }
             }
             std::cout << std::endl;
+            if(!terminals.empty()){
+                auto st = g_->SteinerTree(pivot,terminals);
+                traverse(st);
+                std::cout << std::endl;
+                rowOp(A,terminals,st,2,label2qubit);
+            }
 
             // Steiner Tree Construction: (currently commented out)
             // This section is intended to find a Steiner tree that connects the set of terminal nodes.
@@ -109,6 +118,10 @@ namespace lq{
             }
 
             // for(path qubit in Ts) do something
+
+            
+            g_->deleteVertex(label2qubit.getlabel(col));
+            std::cout << A <<std::endl;
 
         }
 
