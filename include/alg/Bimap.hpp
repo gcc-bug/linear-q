@@ -36,26 +36,26 @@ class label2qubit {
         }       
         
         void insert(const lq::label& label, int qubit) {
-            if (LabelToQubit.find(label) != LabelToQubit.end() || isValuePresent(qubit)) {
+            if (this->LabelToQubit.find(label) != this->LabelToQubit.end() || this->isValuePresent(qubit)) {
                 throw std::invalid_argument("Duplicate label or qubit");
             }
 
-            LabelToQubit[label] = qubit;
-            QubitToLabel[qubit] = label;
+            this->LabelToQubit[label] = qubit;
+            this->QubitToLabel[qubit] = label;
         }
 
         lq::label getlabel(int qubit) const {
-            auto it = QubitToLabel.find(qubit);
-            if (it == QubitToLabel.end()) {
-                throw std::out_of_range("qubit not found");
+            auto it = this->QubitToLabel.find(qubit);
+            if (it == this->QubitToLabel.end()) {
+                throw std::out_of_range("qubit not found: " + std::to_string(qubit));
             }
             return it->second;
         }
 
         int getqubit(const lq::label& label) const {
-            auto it = LabelToQubit.find(label);
-            if (it == LabelToQubit.end()) {
-                throw std::out_of_range("label not found");
+            auto it = this->LabelToQubit.find(label);
+            if (it == this->LabelToQubit.end()) {
+                throw std::out_of_range("label not found: " + std::to_string(label));
             }
             return it->second;
         }
