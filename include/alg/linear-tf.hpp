@@ -70,7 +70,7 @@ namespace lq{
             std::cout << std::endl;
             if(!terminals.empty()){
                 auto st = g_->SteinerTree(pivot,terminals);
-                traverse(st);
+                st->traverse();
                 std::cout << std::endl;
                 rowOp(A,terminals,st,1,label2qubit);
             }
@@ -101,7 +101,7 @@ namespace lq{
             std::cout << std::endl;
             if(!terminals.empty()){
                 auto st = g_->SteinerTree(pivot,terminals);
-                traverse(st);
+                st->traverse();
                 std::cout << std::endl;
                 rowOp(A,terminals,st,2,label2qubit);
             }
@@ -111,7 +111,7 @@ namespace lq{
             // The tree minimizes the total length of the paths from each terminal to the root.
             // rowOp(A,terminals,St,2);
             std::vector<int> B(n);
-            for(int row = col+1; col < A.shape()[1]; ++col){
+            for(int row = col+1; row < A.shape()[1]; ++row){
                 if(terminals.find(col)!=terminals.end()){
                     B.at(col) = col;
                 }

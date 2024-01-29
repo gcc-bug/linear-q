@@ -18,8 +18,8 @@ int main(){
     insertChild(node3,node4);
     insertChild(node2,node5);
 
-    traverse(node1);
-    exportTreeToDot(node1,"tree");
+    node1->traverse();
+    node1->exportTreeToDot("tree");
 
     std::set<label> terminals = {3,4,5};
 

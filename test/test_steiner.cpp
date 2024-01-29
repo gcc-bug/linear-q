@@ -44,6 +44,6 @@ int main() {
     // }
     auto root = gridGraph.SteinerTree(1,terminals);
     std::cout << "Tree Traversal:" << std::endl;
-    traverse(root);
-    exportTreeToDot(root,"tree");
+    root->traverse();
+    root->exportTreeToDot("tree");
 }

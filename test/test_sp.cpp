@@ -18,15 +18,15 @@ int main(){
     insertChild(node3,node4);
     insertChild(node4,node5);
 
-    traverse(node1);
-    exportTreeToDot(node1,"tree");
+    node1->traverse();
+    node1->exportTreeToDot("tree");
 
     std::set<label> terminals = {3,4,5};
 
     auto Ts = separate(node1,1,terminals,1);
     for(auto T:Ts){
         std::cout << "\nroot: ";
-        std::cout << T.root->data << std::endl;
+        std::cout << T.root->get_data() << std::endl;
         std::cout << "leave: ";
         for(auto leaf:T.leaves){
             std::cout << leaf << " ";

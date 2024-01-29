@@ -1,6 +1,6 @@
 #ifndef ST_TREE_CLASS
 #define ST_TREE_CLASS
-#include <vector>
+#include <set>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -8,68 +8,73 @@
 
 namespace lq
 {
-    struct Sttree {
+    class Sttree {
+        private:
         label data;
-        std::vector<Sttree*> children;
+        std::set<Sttree*> children;
 
+        public:
         Sttree(label value) : data(value) {}
+        label inline get_data(){
+            return this->data;
+        }
+        std::set<Sttree*> inline get_children(){
+            return this->children;
+        }
 
-        void exportToDot(std::ofstream& outfile) {
-            for (auto child : children) {
+        void inline exportToDot(std::ofstream& outfile) {
+            for (auto child : this->children) {
                 outfile << "    " << data << " -- " << child->data << ";\n";
                 child->exportToDot(outfile);
             }
         }
+
+        void exportTreeToDot(const std::string& filename) {
+            std::ofstream outfile(filename + ".dot");
+            outfile << "graph G {\n";
+            this->exportToDot(outfile);
+
+            outfile << "}\n";
+            outfile.close();
+
+            std::string command = "dot -Tpng " + filename + ".dot -o " + filename + ".png";
+            system(command.c_str());
+        }
+
+        void inline insertChild(label value){
+            Sttree* newNode = new Sttree(value);
+            this->children.insert(newNode);
+        }
+        void inline insertChild(Sttree* child){
+            this->children.insert(child);
+        }
+        void traverse(int depth = 0) {
+            std::cout << std::string(depth, ' ') << this->data << std::endl;
+            for (auto child : this->children) {
+                child->traverse(depth + 1);
+            }
+        }
+        bool inline isChild(Sttree* child){
+            return this->children.find(child) != this->children.end();
+        }
+        Sttree* findNode(const label& data) {
+            if (this->data == data) return this;
+
+            for (auto child : this->children) {
+                Sttree* result = child->findNode(data);
+                if (result != nullptr) return result;
+            }
+
+            return nullptr;
+        }
     };
 
     void insertChild(Sttree* parent, label value) {
-        Sttree* newNode = new Sttree(value);
-        parent->children.push_back(newNode);
+        parent->insertChild(value);
     }
     void insertChild(Sttree* parent, Sttree* child) {
-        parent->children.push_back(child);
+        parent->insertChild(child);
     }
-    void traverse(Sttree* root, int depth = 0) {
-        if (root == nullptr) return;
-        std::cout << std::string(depth, ' ') << root->data << std::endl;
-        for (auto child : root->children) {
-            traverse(child, depth + 1);
-        }
-    }
-
-    void exportTreeToDot(Sttree* root, const std::string& filename) {
-        std::ofstream outfile(filename + ".dot");
-        outfile << "graph G {\n";
-
-        if (root != nullptr) {
-            root->exportToDot(outfile);
-        }
-
-        outfile << "}\n";
-        outfile.close();
-
-        std::string command = "dot -Tpng " + filename + ".dot -o " + filename + ".png";
-        system(command.c_str());
-    }
-
-    bool isChild(Sttree* A, Sttree* B){
-        for(auto child: B->children){
-            if(child->data == A->data) return true;
-        }
-        return false;
-    }
-
-    Sttree* findNode(Sttree* root, const label data) {
-        if (root == nullptr) return nullptr;
-        if (root->data == data) return root;
-
-        for (auto child : root->children) {
-            Sttree* result = findNode(child, data);
-            if (result != nullptr) return result;
-        }
-
-        return nullptr;
-    }  
 
 } // namespace lq
 

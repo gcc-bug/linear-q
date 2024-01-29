@@ -206,7 +206,7 @@ public:
         try{
             while(!terminals.empty()){
                 path = findPath(start_vertices,terminals);
-                current_node = findNode(root,path.front());
+                current_node = root->findNode(path.front());
                 for(auto it = std::next(path.begin()); it != path.end(); ++it) {
                     auto u = *it;
                     start_vertices.insert(u);

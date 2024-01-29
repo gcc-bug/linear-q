@@ -20,7 +20,7 @@ namespace lq{
     
     std::vector<SubTree> separate(Sttree* TcS, label pivot, std::set<label>& terminals, size_t alg) {
         // alg tag ={1,2,3} for different situation of TF, while tag = 4 only for NW
-        if(TcS->data != pivot || TcS->children.empty()){
+        if(TcS->get_data() != pivot || TcS->get_children().empty()){
             throw std::invalid_argument("Erruer");
         }
 
@@ -42,10 +42,10 @@ namespace lq{
             while(!queue.empty()){
                 Sttree* currentNode = queue.front();
                 queue.pop();
-                for(auto u: currentNode->children){
-                    if (terminals.find(u->data)!=terminals.end()) {
-                        T_rootS_root.leaves.insert(u->data);
-                        if(u->children.size()>0){
+                for(auto u: currentNode->get_children()){
+                    if (terminals.find(u->get_data())!=terminals.end()) {
+                        T_rootS_root.leaves.insert(u->get_data());
+                        if(u->get_children().size()>0){
                             R.push(u);
                         }
                     }
