@@ -26,8 +26,15 @@ public:
     
     Graph() {}
 
-    inline bool inGraph(label verite){
+    inline bool inGraph(label verite) const{
         return this->vertices.find(verite) != this->vertices.end();
+    }
+
+    std::set<label> get_neigh(label v) const{
+        if(inGraph(v)){
+            return this->neigh.at(v);
+        }
+        throw std::runtime_error("errur");
     }
 
     void addEdge(label src, label dest) {

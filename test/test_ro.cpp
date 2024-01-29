@@ -16,7 +16,7 @@ int main(){
     insertChild(node1,node2);
     insertChild(node2,node3);
     insertChild(node3,node4);
-    insertChild(node4,node5);
+    insertChild(node2,node5);
 
     traverse(node1);
     exportTreeToDot(node1,"tree");

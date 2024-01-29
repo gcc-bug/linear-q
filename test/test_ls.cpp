@@ -13,7 +13,7 @@ int main(){
     g.addEdge(4,5);
     g.addEdge(5,6);
 
-
+    g.exportToDot("graph");
     xt::xarray<bool> A = {{1, 1, 0, 1, 1, 0},
                          {0, 0, 1, 1, 0, 1},
                          {1, 0, 1, 0, 1, 0},
@@ -22,7 +22,7 @@ int main(){
                          {0, 1, 0, 1, 0, 1}};
     label2qubit label2qubit(std::set<label>{1, 2, 3, 4, 5, 6});
     label2qubit.message();
-    linearSynth(A,g,label2qubit);
+    linearSynth(A,&g,label2qubit);
     std::cout << std::endl;
     std::cout << A << std::endl;
     return 0;
