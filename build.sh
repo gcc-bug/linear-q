@@ -20,5 +20,7 @@ echo "test find steiner tree:"
 ./test_steiner
 echo "test row operation:"
 ./test_ro
+echo "test linear synthesis:"
+./test_ls
 # Pause to keep the terminal open (optional)
 read -p "Press Enter to exit..."

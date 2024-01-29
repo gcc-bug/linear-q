@@ -14,6 +14,9 @@
 #include "Bimap.hpp"
 
 namespace lq {
+    inline void CNOT(label control, label target){
+        std::cout << "CNOT " << control <<" " << target << std::endl;
+    }
     std::vector<std::pair<label,label>> topDown1(Sttree* root,const std::set<label> leaves){
         if (root == nullptr) return {};
         std::vector<std::pair<label,label>> gates, temp;
@@ -84,7 +87,7 @@ namespace lq {
     }
 
     void rowOp(xt::xarray<bool>& A, std::set<label>& terminals, Sttree* root, const size_t alg, const label2qubit label2qubit) {
-        auto Ts = separate(root,root->data,terminals,alg);
+                auto Ts = separate(root,root->data,terminals,alg);
 
         std::vector<std::pair<label,label>> paths;
         for(label i = Ts.size()-1; i>=0; --i){
@@ -92,40 +95,40 @@ namespace lq {
                 std::cout << "Bottom Up 1" << std::endl;
                 paths = bottomUp1(Ts.at(i).root,Ts.at(i).leaves);
                 std::reverse(paths.begin(),paths.end());
-                for(auto qubits: paths){
-                    std::cout << qubits.first << " " << qubits.second << "\n";
+                for(auto labels: paths){
+                    CNOT(labels.first,labels.second);
                     if(alg != 4){
-                        mod2add(A,label2qubit.getqubit(qubits.second),label2qubit.getqubit(qubits.first));
+                        mod2add(A,label2qubit.getqubit(labels.second),label2qubit.getqubit(labels.first));
                     }
                 }   
             }
             // Top-Down-1
             std::cout << "Top Down 1" << std::endl;
             paths = topDown1(Ts.at(i).root,Ts.at(i).leaves);
-            for(auto qubits: paths){
-                std::cout << qubits.first << " " << qubits.second << "\n";
+            for(auto labels: paths){
+                CNOT(labels.first,labels.second);
                 if(alg != 4){
-                    mod2add(A,label2qubit.getqubit(qubits.second),label2qubit.getqubit(qubits.first));
+                    mod2add(A,label2qubit.getqubit(labels.second),label2qubit.getqubit(labels.first));
                 }
             }
             // Bottom-Up-2
             std::cout << "Bottom up 2" << std::endl;
             paths = bottomUp2(Ts.at(i).root,Ts.at(i).leaves);
             std::reverse(paths.begin(),paths.end());
-            for(auto qubits: paths){
-                std::cout << qubits.first << " " << qubits.second << "\n";
+            for(auto labels: paths){
+                CNOT(labels.first,labels.second);
                 if(alg != 4){
-                    mod2add(A,label2qubit.getqubit(qubits.second),label2qubit.getqubit(qubits.first));
+                    mod2add(A,label2qubit.getqubit(labels.second),label2qubit.getqubit(labels.first));
                 }
             }
             if(alg!=1){
                 // Top-Down-2
                 std::cout << "Top Down 2" << std::endl;
                 paths = topDown2(Ts.at(i).root,Ts.at(i).leaves);
-                for(auto qubits: paths){
-                    std::cout << qubits.first << " " << qubits.second << "\n";
+                for(auto labels: paths){
+                    CNOT(labels.first,labels.second);
                     if(alg != 4){
-                        mod2add(A,label2qubit.getqubit(qubits.second),label2qubit.getqubit(qubits.first));
+                        mod2add(A,label2qubit.getqubit(labels.second),label2qubit.getqubit(labels.first));
                     }
                 }   
             }

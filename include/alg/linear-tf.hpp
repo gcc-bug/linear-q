@@ -5,7 +5,7 @@
 #include "row-op.hpp"
 
 namespace lq{
-    void makeTrue(xt::xarray<bool>& A,const Graph* g,const label2qubit label2qubit,int col){
+    void TransformMatrix(xt::xarray<bool>& A,const Graph* g,const label2qubit label2qubit,int col){
         label pivot = label2qubit.getlabel(col);
         std::set<label> visited = {pivot};
         std::vector<label> path;
@@ -50,7 +50,7 @@ namespace lq{
         Graph* g_ = g->clone();
         for(int col = 0; col < n; ++col){
             if(!A(col,col)){
-                makeTrue(A,g_,label2qubit,col);
+                TransformMatrix(A,g_,label2qubit,col);
                 std::cout<<col<<":\n"<< A << std::endl;
                 // Path Finding: Identify a short path to a node 'j' where A(col,j) = 1.
                 // Then, for the path from 'col' to 'j', apply CNOT starting from 'col' and ending at 'j', 
@@ -61,7 +61,7 @@ namespace lq{
             std::cout <<"pivot: "<< pivot << std::endl;
 
             std::set<label> terminals;
-            for(int row = col+1; row < A.shape()[1]; ++row){
+            for(int row = col+1; row < n; ++row){
                 if(A(row,col)){
                     terminals.insert(label2qubit.getlabel(row));
                     std::cout << label2qubit.getlabel(row) <<" ";
@@ -89,7 +89,7 @@ namespace lq{
             }
             // find terminals
             std::set<int> terminals;
-            for(int qubit = col; qubit < A.shape()[1]-1; ++qubit){
+            for(int qubit = col; qubit < n; ++qubit){
                 if(A(col,qubit)){
                     terminals.insert(qubit+1);
                     std::cout << col <<" ";

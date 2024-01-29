@@ -39,11 +39,9 @@ public:
 
     void addEdge(label src, label dest) {
         if(!inGraph(src)){
-            std::cout << "new edge: "<< src << std::endl;
             this->vertices.insert(src);
         }
         if(!inGraph(dest)){
-            std::cout << "new edge: "<< dest << std::endl;
             this->vertices.insert(dest);
         }
         this->neigh[src].insert(dest);
