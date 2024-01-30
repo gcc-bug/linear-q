@@ -1,5 +1,5 @@
 #include "graph/tree.hpp"
-#include "alg/row-op.hpp"
+#include "alg/seprate.hpp"
 #include "xtensor/xarray.hpp"
 #include "xtensor/xio.hpp"
 #include <set>
@@ -23,7 +23,7 @@ int main(){
 
     std::set<label> terminals = {3,4,5};
 
-    auto Ts = separate(node1,terminals,1);
+    auto Ts = separate(node1,terminals,AlgSignal::diag);
     for(auto T:Ts){
         std::cout << "\nroot: ";
         std::cout << T.root->get_data() << std::endl;

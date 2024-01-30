@@ -11,14 +11,10 @@
 #include <utility>
 #include "graph/tree.hpp"
 #include "../Config.hpp"
+#include "typedef.hpp"
 
 namespace lq{
-    struct SubTree {
-        Sttree* root;
-        std::set<label> leaves;
-    };
-    
-    std::vector<SubTree> separate(Sttree* TcS, std::set<label>& terminals, size_t alg) {
+    std::vector<SubTree> separate(Sttree* TcS, std::set<label>& terminals, AlgSignal alg) {
         // alg tag ={1,2,3} for different situation of TF, while tag = 4 only for NW
         if(TcS->get_children().empty()){
             throw std::invalid_argument("Erruer");
@@ -56,7 +52,7 @@ namespace lq{
                 }
             }
 
-            if (alg == 4) {
+            if (alg == AlgSignal::phase) {
                 // TODO: need modify
                 T.push_back(T_rootS_root);
             } else {

@@ -5,7 +5,6 @@
 #include <set>
 #include <iostream>
 #include <string>
-#include "seprate.hpp"
 #include "../Config.hpp"
 #include "typedef.hpp"
 
@@ -69,16 +68,16 @@ namespace lq {
         return gates;
     }
 
-    void rowOp(LFMatrix& A, std::vector<SubTree>& Ts, int alg) {
+    void rowOp(LFMatrix& A, std::vector<SubTree>& Ts, AlgSignal alg) {
         std::vector<std::pair<label,label>> paths;
         for(label i = Ts.size()-1; i>=0; --i){
-            if(alg!=1){
+            if(alg != AlgSignal::diag){
                 std::cout << "Bottom Up 1" << std::endl;
                 paths = bottomUp1(Ts.at(i).root,Ts.at(i).leaves);
                 std::reverse(paths.begin(),paths.end());
                 for(auto labels: paths){
                     CNOT(labels.first,labels.second);
-                    if(alg != 4){
+                    if(alg != AlgSignal::phase){
                         A.mod2add(labels.second,labels.first);
                     }
                 }   
@@ -88,7 +87,7 @@ namespace lq {
             paths = topDown1(Ts.at(i).root,Ts.at(i).leaves);
             for(auto labels: paths){
                 CNOT(labels.first,labels.second);
-                if(alg != 4){
+                if(alg != AlgSignal::phase){
                     A.mod2add(labels.second,labels.first);
                 }
             }
@@ -98,17 +97,17 @@ namespace lq {
             std::reverse(paths.begin(),paths.end());
             for(auto labels: paths){
                 CNOT(labels.first,labels.second);
-                if(alg != 4){
+                if(alg != AlgSignal::phase){
                     A.mod2add(labels.second,labels.first);
                 }
             }
-            if(alg!=1){
+            if(alg != AlgSignal::diag){
                 // Top-Down-2
                 std::cout << "Top Down 2" << std::endl;
                 paths = topDown2(Ts.at(i).root,Ts.at(i).leaves);
                 for(auto labels: paths){
                     CNOT(labels.first,labels.second);
-                    if(alg != 4){
+                    if(alg != AlgSignal::phase){
                         A.mod2add(labels.second,labels.first);
                     }
                 }   

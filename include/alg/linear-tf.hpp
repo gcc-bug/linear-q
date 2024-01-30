@@ -3,6 +3,8 @@
 
 #include "graph/graph.hpp"
 #include "row-op.hpp"
+#include "seprate.hpp"
+#include "typedef.hpp"
 
 namespace lq{
     void TransformMatrix(LFMatrix& A,const Graph* g, int col){
@@ -73,8 +75,8 @@ namespace lq{
                 auto st = g_->SteinerTree(pivot,terminals);
                 st->traverse();
                 std::cout << std::endl;
-                auto Ts = separate(st,terminals,1);
-                rowOp(A,Ts,1);
+                auto Ts = separate(st,terminals,AlgSignal::diag);
+                rowOp(A,Ts,AlgSignal::diag);
             }
             g_->deleteVertex(l2q.get_label(col));
             std::cout << A.get_data() <<std::endl;
@@ -105,8 +107,8 @@ namespace lq{
                 auto st = g_->SteinerTree(pivot,terminals);
                 st->traverse();
                 std::cout << std::endl;
-                auto Ts = separate(st,terminals,2);
-                rowOp(A,Ts,2);
+                auto Ts = separate(st,terminals,AlgSignal::propagated);
+                rowOp(A,Ts,AlgSignal::propagated);
             }
 
             // Steiner Tree Construction: (currently commented out)

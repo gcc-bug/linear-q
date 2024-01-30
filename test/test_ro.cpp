@@ -1,5 +1,6 @@
 #include "graph/tree.hpp"
 #include "alg/row-op.hpp"
+#include "alg/seprate.hpp"
 #include "xtensor/xarray.hpp"
 #include "xtensor/xio.hpp"
 #include <set>
@@ -31,9 +32,9 @@ int main(){
                          {0, 1, 0, 1, 0, 1}};
     label2qubit label2qubit(std::set<label>{1, 2, 3, 4, 5, 6});
     label2qubit.message();
-    auto Ts = separate(node1,terminals,1);
+    auto Ts = separate(node1,terminals,AlgSignal::diag);
     LFMatrix A_ = LFMatrix(A,label2qubit);
-    rowOp(A_,Ts,1);
+    rowOp(A_,Ts,AlgSignal::diag);
     std::cout << A << std::endl;
     return 0;
 }

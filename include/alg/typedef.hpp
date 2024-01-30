@@ -11,9 +11,18 @@
 #include "xtensor/xbuilder.hpp" 
 #include "../Config.hpp"
 namespace lq{
+    enum class AlgSignal{
+        diag, // alg<- 1, Top Down 1, Bottom up 2
+        propagated, // alg<-2,3, Bottom Up 1, Top Down 1, Bottom up 2, Top-Down-2
+        phase //alg<-4, Bottom Up 1, Top Down 1, Bottom up 2, Top-Down-2
+    };
     void CNOT(label control, label target) {
             std::cout << "CNOT " << control <<" " << target << std::endl;
     }
+    struct SubTree {
+        Sttree* root;
+        std::set<label> leaves;
+    };
     class label2qubit {
         private:
             std::map<lq::label, int> LabelToQubit;
