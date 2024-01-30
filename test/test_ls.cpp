@@ -27,5 +27,6 @@ int main(){
     std::cout << std::endl;
     std::cout << A_.get_A() << std::endl;
     std::cout << std::boolalpha << "good ? " << A_.isGood() << std::endl;
+    std::cout << std::boolalpha << "finish ? " << A_.isEye() << std::endl;
     return 0;
 }
