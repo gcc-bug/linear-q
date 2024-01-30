@@ -6,7 +6,7 @@
 
 namespace lq{
     void TransformMatrix(xt::xarray<bool>& A,const Graph* g,const label2qubit label2qubit,int col){
-        label pivot = label2qubit.getlabel(col);
+        label pivot = label2qubit.get_label(col);
         std::set<label> visited = {pivot};
         std::vector<label> path;
         std::queue<std::pair<label, std::vector<label>>> queue;
@@ -21,7 +21,7 @@ namespace lq{
             for(auto u: g->get_neigh(current_vertex)){
                 path = path_to_current;
                 path.push_back(u);
-                if(A(label2qubit.getqubit(u),col)) break;
+                if(A(label2qubit.get_qubit(u),col)) break;
                 if(visited.find(u) == visited.end()){
                     queue.push({u,path});
                     visited.insert(u);
@@ -31,7 +31,7 @@ namespace lq{
         std::reverse(path.begin(), path.end());
         for(int i = 0; i < path.size()-1; ++i){
             CNOT(path[i],path[i+1]);
-            mod2add(A,label2qubit.getqubit(path[i+1]),label2qubit.getqubit(path[i]));
+            mod2add(A,label2qubit.get_qubit(path[i+1]),label2qubit.get_qubit(path[i]));
         }
     }
 
@@ -57,14 +57,14 @@ namespace lq{
                 // subsequently updating the matrix A accordingly.
             }
             // find terminals
-            label pivot = label2qubit.getlabel(col);
+            label pivot = label2qubit.get_label(col);
             std::cout <<"pivot: "<< pivot << std::endl;
 
             std::set<label> terminals;
             for(int row = col+1; row < n; ++row){
                 if(A(row,col)){
-                    terminals.insert(label2qubit.getlabel(row));
-                    std::cout << label2qubit.getlabel(row) <<" ";
+                    terminals.insert(label2qubit.get_label(row));
+                    std::cout << label2qubit.get_label(row) <<" ";
                 }
             }
             std::cout << std::endl;
@@ -75,7 +75,7 @@ namespace lq{
                 auto Ts = separate(st,terminals,1);
                 rowOp(A,Ts,1,label2qubit);
             }
-            g_->deleteVertex(label2qubit.getlabel(col));
+            g_->deleteVertex(label2qubit.get_label(col));
             std::cout << A <<std::endl;
             // After constructing the tree, remove 'col' from G'.
         }
@@ -89,14 +89,14 @@ namespace lq{
                 std::cout<<col<<":\n"<< A << std::endl;
             }
             // find terminals
-            label pivot = label2qubit.getlabel(col);
+            label pivot = label2qubit.get_label(col);
             std::cout <<"pivot: "<< pivot << std::endl;
 
             std::set<label> terminals;
             for(int row = col+1; row < n; ++row){
                 if(A(row,col)){
-                    terminals.insert(label2qubit.getlabel(row));
-                    std::cout << label2qubit.getlabel(row) <<" ";
+                    terminals.insert(label2qubit.get_label(row));
+                    std::cout << label2qubit.get_label(row) <<" ";
                 }
             }
             std::cout << std::endl;
@@ -122,7 +122,7 @@ namespace lq{
             // for(path qubit in Ts) do something
 
             
-            g_->deleteVertex(label2qubit.getlabel(col));
+            g_->deleteVertex(label2qubit.get_label(col));
             std::cout << A <<std::endl;
 
         }

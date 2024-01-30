@@ -96,7 +96,7 @@ namespace lq {
                 for(auto labels: paths){
                     CNOT(labels.first,labels.second);
                     if(alg != 4){
-                        mod2add(A,label2qubit.getqubit(labels.second),label2qubit.getqubit(labels.first));
+                        mod2add(A,label2qubit.get_qubit(labels.second),label2qubit.get_qubit(labels.first));
                     }
                 }   
             }
@@ -106,7 +106,7 @@ namespace lq {
             for(auto labels: paths){
                 CNOT(labels.first,labels.second);
                 if(alg != 4){
-                    mod2add(A,label2qubit.getqubit(labels.second),label2qubit.getqubit(labels.first));
+                    mod2add(A,label2qubit.get_qubit(labels.second),label2qubit.get_qubit(labels.first));
                 }
             }
             // Bottom-Up-2
@@ -116,7 +116,7 @@ namespace lq {
             for(auto labels: paths){
                 CNOT(labels.first,labels.second);
                 if(alg != 4){
-                    mod2add(A,label2qubit.getqubit(labels.second),label2qubit.getqubit(labels.first));
+                    mod2add(A,label2qubit.get_qubit(labels.second),label2qubit.get_qubit(labels.first));
                 }
             }
             if(alg!=1){
@@ -126,13 +126,13 @@ namespace lq {
                 for(auto labels: paths){
                     CNOT(labels.first,labels.second);
                     if(alg != 4){
-                        mod2add(A,label2qubit.getqubit(labels.second),label2qubit.getqubit(labels.first));
+                        mod2add(A,label2qubit.get_qubit(labels.second),label2qubit.get_qubit(labels.first));
                     }
                 }   
             }
             // if(alg==4){
             //     for(auto leaf: terminals){
-            //         mod2add(A,label2qubit.getqubit(root->get_data()),label2qubit.getqubit(leaf));
+            //         mod2add(A,label2qubit.get_qubit(root->get_data()),label2qubit.get_qubit(leaf));
             //     }
             // }
         }
