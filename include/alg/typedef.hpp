@@ -1,5 +1,5 @@
-#ifndef DATA_ST
-#define DATA_ST
+#ifndef TYPE_DEF
+#define TYPE_DEF
 
 #include <map>
 #include <set>
@@ -94,7 +94,7 @@ namespace lq{
             this->A = xt::transpose(this->A);
         }
 
-        xt::xarray<bool> get_A() const {
+        xt::xarray<bool> get_data() const {
             return this->A;
         }
 
@@ -153,4 +153,4 @@ namespace lq{
         }
     };
 }
-#endif // DATA_ST
+#endif // TYPE_DEF

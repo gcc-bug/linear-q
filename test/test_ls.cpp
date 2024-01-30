@@ -25,7 +25,7 @@ int main(){
     LFMatrix A_ = LFMatrix(A,label2qubit);
     linearSynth(A_,&g);
     std::cout << std::endl;
-    std::cout << A_.get_A() << std::endl;
+    std::cout << A_.get_data() << std::endl;
     std::cout << std::boolalpha << "good ? " << A_.isGood() << std::endl;
     std::cout << std::boolalpha << "finish ? " << A_.isEye() << std::endl;
     return 0;

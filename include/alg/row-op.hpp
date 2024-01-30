@@ -7,7 +7,7 @@
 #include <string>
 #include "seprate.hpp"
 #include "../Config.hpp"
-#include "Bimap.hpp"
+#include "typedef.hpp"
 
 namespace lq {
     std::vector<std::pair<label,label>> topDown1(Sttree* root,const std::set<label> leaves){
