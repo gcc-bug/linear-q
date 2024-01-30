@@ -74,5 +74,72 @@ namespace lq{
             }
     };
 
+    class LFMatrix{
+        private:
+            xt::xarray<bool> A;
+            label2qubit l2q;
+
+            bool inline SizeEqual() const{
+                return this->A.dimension() == 2 && A.shape()[0] == l2q.get_size();
+            }
+
+        public:
+
+        LFMatrix(const xt::xarray<bool>& A_, const label2qubit& l2q_) : A(A_), l2q(l2q_) {}
+
+        xt::xarray<bool> get_A() const {
+            return this->A;
+        }
+
+        label2qubit get_l2q() const {
+            return this->l2q;
+        }
+
+        void mod2add(label i, label j){
+            if(not this->SizeEqual()){
+                throw std::invalid_argument("Erreur");
+            }
+            int row_i = this->l2q.get_qubit(i);
+            int row_j = this->l2q.get_qubit(j);
+            xt::view(A, row_i, xt::all()) = xt::view(A, row_i, xt::all()) ^ xt::view(A, row_j, xt::all());
+            return ;
+        }
+
+        void CNOT(label control, label target){
+            std::cout << "CNOT " << control <<" " << target << std::endl;
+            this->mod2add(target,control);
+        }
+
+        bool isEye() const{
+            if (this->A.dimension() != 2) {
+                throw std::invalid_argument("Erreur");
+            }
+            size_t rows = this->A.shape()[0];
+            size_t cols = this->A.shape()[1];
+            for (size_t i = 0; i < rows; ++i) {
+                for (size_t j = 0; j < cols; ++j) {
+                    if (i != j && this->A(i, j)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        bool isGood() const{
+            if (this->A.dimension() != 2) {
+                throw std::invalid_argument("Erreur");
+            }
+            size_t rows = this->A.shape()[0];
+            for (size_t i = 0; i < rows; ++i) {
+                for (size_t j = 0; j < i; ++j) {
+                    if (this->A(i, j)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+    };
 }
 #endif // DATA_ST
