@@ -11,6 +11,9 @@
 #include "xtensor/xbuilder.hpp" 
 #include "../Config.hpp"
 namespace lq{
+    void CNOT(label control, label target) {
+            std::cout << "CNOT " << control <<" " << target << std::endl;
+    }
     class label2qubit {
         private:
             std::map<lq::label, int> LabelToQubit;
@@ -87,12 +90,20 @@ namespace lq{
 
         LFMatrix(const xt::xarray<bool>& A_, const label2qubit& l2q_) : A(A_), l2q(l2q_) {}
 
+        void transpose(){
+            this->A = xt::transpose(this->A);
+        }
+
         xt::xarray<bool> get_A() const {
             return this->A;
         }
 
         label2qubit get_l2q() const {
             return this->l2q;
+        }
+
+        bool inline get_ele(size_t i, size_t j) const{
+            return this->A(i,j);
         }
 
         void mod2add(label i, label j){
@@ -105,8 +116,8 @@ namespace lq{
             return ;
         }
 
-        void CNOT(label control, label target){
-            std::cout << "CNOT " << control <<" " << target << std::endl;
+        void CNOT_(label control, label target){
+            CNOT(control,target);
             this->mod2add(target,control);
         }
 

@@ -22,8 +22,10 @@ int main(){
                          {0, 1, 0, 1, 0, 1}};
     label2qubit label2qubit(std::set<label>{1, 2, 3, 4, 5, 6});
     label2qubit.message();
-    linearSynth(A,&g,label2qubit);
+    LFMatrix A_ = LFMatrix(A,label2qubit);
+    linearSynth(A_,&g);
     std::cout << std::endl;
-    std::cout << A << std::endl;
+    std::cout << A_.get_A() << std::endl;
+    std::cout << std::boolalpha << "good ? " << A_.isGood() << std::endl;
     return 0;
 }

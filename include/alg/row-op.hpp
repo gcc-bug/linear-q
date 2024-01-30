@@ -3,10 +3,6 @@
 
 #include <vector>
 #include <set>
-#include "xtensor/xarray.hpp"
-#include "xtensor/xview.hpp"
-#include "xtensor/xio.hpp"
-#include "xtensor/xbuilder.hpp" 
 #include <iostream>
 #include <string>
 #include "seprate.hpp"
@@ -14,9 +10,6 @@
 #include "Bimap.hpp"
 
 namespace lq {
-    inline void CNOT(label control, label target){
-        std::cout << "CNOT " << control <<" " << target << std::endl;
-    }
     std::vector<std::pair<label,label>> topDown1(Sttree* root,const std::set<label> leaves){
         if (root == nullptr) return {};
         std::vector<std::pair<label,label>> gates, temp;
@@ -76,17 +69,7 @@ namespace lq {
         return gates;
     }
 
-    void mod2add(xt::xarray<bool>& A, int row_i, int row_j){
-        if (row_i < A.shape()[0] && row_j < A.shape()[0]) {
-            xt::view(A, row_i, xt::all()) = xt::view(A, row_i, xt::all()) ^ xt::view(A, row_j, xt::all());
-            return ;
-        }
-        else{
-            throw std::invalid_argument("errur");
-        }
-    }
-
-    void rowOp(xt::xarray<bool>& A, std::vector<SubTree>& Ts, int alg,const label2qubit label2qubit) {
+    void rowOp(LFMatrix& A, std::vector<SubTree>& Ts, int alg) {
         std::vector<std::pair<label,label>> paths;
         for(label i = Ts.size()-1; i>=0; --i){
             if(alg!=1){
@@ -96,7 +79,7 @@ namespace lq {
                 for(auto labels: paths){
                     CNOT(labels.first,labels.second);
                     if(alg != 4){
-                        mod2add(A,label2qubit.get_qubit(labels.second),label2qubit.get_qubit(labels.first));
+                        A.mod2add(labels.second,labels.first);
                     }
                 }   
             }
@@ -106,7 +89,7 @@ namespace lq {
             for(auto labels: paths){
                 CNOT(labels.first,labels.second);
                 if(alg != 4){
-                    mod2add(A,label2qubit.get_qubit(labels.second),label2qubit.get_qubit(labels.first));
+                    A.mod2add(labels.second,labels.first);
                 }
             }
             // Bottom-Up-2
@@ -116,7 +99,7 @@ namespace lq {
             for(auto labels: paths){
                 CNOT(labels.first,labels.second);
                 if(alg != 4){
-                    mod2add(A,label2qubit.get_qubit(labels.second),label2qubit.get_qubit(labels.first));
+                    A.mod2add(labels.second,labels.first);
                 }
             }
             if(alg!=1){
@@ -126,7 +109,7 @@ namespace lq {
                 for(auto labels: paths){
                     CNOT(labels.first,labels.second);
                     if(alg != 4){
-                        mod2add(A,label2qubit.get_qubit(labels.second),label2qubit.get_qubit(labels.first));
+                        A.mod2add(labels.second,labels.first);
                     }
                 }   
             }
