@@ -1,3 +1,10 @@
+/*
+ * @Author       : coldcat(by.gdc@outlook.com)
+ * @Version      : V1.0
+ * @Date         : 2024-01-27 22:26:28
+ * @Description  : this file is about the class steiner tree
+ * @ToDo         : 
+ */
 #ifndef ST_TREE_CLASS
 #define ST_TREE_CLASS
 #include <set>

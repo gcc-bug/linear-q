@@ -1,3 +1,10 @@
+/*
+ * @Author       : coldcat(by.gdc@outlook.com)
+ * @Version      : V1.0
+ * @Date         : 2024-01-27 22:26:28
+ * @Description  : this file is about the graph class to describe the physical device typology
+ * @ToDo         : optimize the function SteinerTree
+ */
 #ifndef GRAPH_CLASS
 #define GRAPH_CLASS
 

@@ -1,3 +1,10 @@
+/*
+ * @Author       : coldcat(by.gdc@outlook.com)
+ * @Version      : V1.0
+ * @Date         : 2024-01-29 15:26:25
+ * @Description  : this file is about algorithm linear synthesis
+ * @ToDo         : finish B[n] part
+ */
 #ifndef ALG_LINEAR_SYNTH
 #define ALG_LINEAR_SYNTH
 

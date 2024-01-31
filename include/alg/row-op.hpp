@@ -1,3 +1,10 @@
+/*
+ * @Author       : coldcat(by.gdc@outlook.com)
+ * @Version      : V1.0
+ * @Date         : 2024-01-27 22:26:28
+ * @Description  : this file is about algorithm row operation
+ * @ToDo         : reduce the four tree function to one
+ */
 #ifndef ALG_ROW_OP
 #define ALG_ROW_OP
 

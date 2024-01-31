@@ -1,3 +1,10 @@
+/*
+ * @Author       : coldcat(by.gdc@outlook.com)
+ * @Version      : V1.0
+ * @Date         : 2024-01-27 22:26:28
+ * @Description  : this file is about algorithm separate steiner tree
+ * @ToDo         : add AlgSignal::phase
+ */
 #ifndef Alg_SEP
 #define Alg_SEP
 
