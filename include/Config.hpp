@@ -3,7 +3,7 @@
  * @Version      : V1.0
  * @Date         : 2024-01-27 22:26:28
  * @Description  : this file is about the basic type
- * @ToDo         : add more type
+ * @TODO         : add more type
  */
 #ifndef Config
 #define Config

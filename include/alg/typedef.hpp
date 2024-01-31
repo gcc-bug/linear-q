@@ -3,7 +3,7 @@
  * @Version      : V1.0
  * @Date         : 2024-01-28 16:09:37
  * @Description  : this  file is about class or struct will be used in algorithms
- * @ToDo         : modify class and function name to improve readability
+ * @TODO         : modify class and function name to improve readability
  */
 #ifndef TYPE_DEF
 #define TYPE_DEF
