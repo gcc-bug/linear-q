@@ -1,10 +1,3 @@
-/*
- * @Author       : coldcat(by.gdc@outlook.com)
- * @Version      : V1.0
- * @Date         : 2024-01-27 22:26:28
- * @Description  : 
- * @TODO         : 
- */
 #include "alg/linear-tf.hpp"
 #include "xtensor/xarray.hpp"
 #include "xtensor/xio.hpp"

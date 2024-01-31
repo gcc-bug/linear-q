@@ -168,7 +168,7 @@ public:
 
         return mstEdges; 
     }
-    std::vector<label> findPath(const std::set<label>& start_vertices, const std::set<label>& targets) {
+    std::vector<label> findPath(const std::set<label>& start_vertices, const std::set<label>& targets) const {
         std::queue<std::pair<label, std::vector<label>>> queue;
         std::set<std::pair<label, std::vector<label>>> visited;
 
@@ -190,7 +190,7 @@ public:
                 return path_to_current;
             }
 
-            for (const auto& adjacent_vertex : neigh[current_vertex]) {
+            for (const auto& adjacent_vertex : this->neigh.at(current_vertex)) {
                 auto path_to_adjacent = path_to_current;
                 path_to_adjacent.push_back(adjacent_vertex);
 
@@ -204,7 +204,7 @@ public:
         throw std::runtime_error("No path found");
     }
 
-    Sttree* SteinerTree(const label pivot, std::set<label> terminals){
+    Sttree* SteinerTree(const label pivot, std::set<label> terminals) const{
         std::vector<label> path;
         std::set<label> start_vertices= {pivot};
         Sttree* root = new Sttree(pivot);

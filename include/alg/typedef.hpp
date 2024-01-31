@@ -68,7 +68,7 @@ namespace lq{
             }
 
             void message() const{
-                std::cout << "overall: " << this->size << "pairs" << std::endl;
+                std::cout << "overall: " << this->size << " pairs" << std::endl;
                 for (const auto& pair : this->LabelToIndex) {
                     std::cout << "label: " << pair.first << ", Index: " << pair.second << std::endl;
                 }

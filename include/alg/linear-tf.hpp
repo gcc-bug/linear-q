@@ -17,33 +17,21 @@ namespace lq{
     void TransformMatrix(LFMatrix& A,const Graph* g, int col){
         const LabelIndexBiMap& biMap = A.getBiMap();
         label pivot = biMap.getLabel(col);
-        std::set<label> visited = {pivot};
-        std::vector<label> path;
-        std::queue<std::pair<label, std::vector<label>>> queue;
-        queue.push({pivot,{pivot}});
-
-        while(!queue.empty()){
-            auto front = queue.front();
-            label current_vertex = front.first;
-            auto path_to_current = front.second;
-            queue.pop();
-
-            for(auto u: g->getNeigh(current_vertex)){
-                path = path_to_current;
-                path.push_back(u);
-                if(A.at(biMap.getIndex(u),col)) break;
-                if(visited.find(u) == visited.end()){
-                    queue.push({u,path});
-                    visited.insert(u);
-                }
+        std::set<label> terminals;
+        for(int row = 0 ; row < A.getData().shape()[0]; ++row){
+            if(A.at(row,col)){
+                terminals.insert(biMap.getLabel(row));
+                std::cout << biMap.getLabel(row) <<" ";
             }
         }
+        std::cout << std::endl;
+        auto path = g->findPath({pivot},terminals);
         std::reverse(path.begin(), path.end());
         for(int i = 0; i < path.size()-1; ++i){
             A.CNOT_(path[i],path[i+1]);
         }
     }
-
+    
     void linearSynth(LFMatrix& A,const Graph* g){
         int n = A.getData().shape()[0];
         const LabelIndexBiMap& biMap = A.getBiMap();
@@ -62,9 +50,6 @@ namespace lq{
             if(!A.at(col,col)){
                 TransformMatrix(A,g_,col);
                 std::cout<<col<<":\n" << A.getData() << std::endl;
-                // Path Finding: Identify a short path to a node 'j' where A(col,j) = 1.
-                // Then, for the path from 'col' to 'j', apply CNOT starting from 'col' and ending at 'j', 
-                // subsequently updating the matrix A accordingly.
             }
             // find terminals
             label pivot = biMap.getLabel(col);
