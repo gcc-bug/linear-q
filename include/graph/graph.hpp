@@ -214,15 +214,10 @@ public:
             while(!terminals.empty()){
                 path = findPath(start_vertices,terminals);
                 current_node = root->findNode(path.front());
-                for(auto it = std::next(path.begin()); it != path.end(); ++it) {
-                    auto u = *it;
+                for(auto u: path) {
                     start_vertices.insert(u);
-
-                    next_node = new Sttree(u);
-                    insertChild(current_node, next_node);
-                    current_node = next_node;
                 }
-
+                current_node->insertChild(pathToTree(path));
                 terminals.erase(path.back());
             }
         }
@@ -230,6 +225,25 @@ public:
             std::cerr << "still have terminal " << terminals.size();
         }
         return root;
+    }
+
+    Sttree* pathToTree(const std::vector<label>& path) const{
+        // TODO: use std::unique_ptr<Sttree>
+        // Check if the path has at least 2 elements
+        if (path.size() < 2) {
+            return nullptr;
+        }
+
+        auto res_node = new Sttree(path[1]); // Start from path[1]
+        auto current_node = res_node;
+
+        for (size_t i = 2; i < path.size(); ++i) {
+            auto next_node = new Sttree(path[i]);
+            insertChild(current_node, next_node); 
+            current_node = next_node;
+        }
+
+        return res_node;
     }
 
     void exportToDot(const std::string& filename) {
