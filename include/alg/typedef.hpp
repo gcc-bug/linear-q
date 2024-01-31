@@ -30,63 +30,61 @@ namespace lq{
         Sttree* root;
         std::set<label> leaves;
     };
-    class label2qubit {
+    class LabelIndexBiMap {
         private:
-            std::map<lq::label, int> LabelToQubit;
-            std::map<int, lq::label> QubitToLabel;
+            std::map<lq::label, int> LabelToIndex;
+            std::map<int, lq::label> IndexToLabel;
             std::size_t size;
-            inline bool isValuePresent(int qubit) const {
-                return QubitToLabel.find(qubit) != QubitToLabel.end();
+            inline bool isValuePresent(int Index) const {
+                return IndexToLabel.find(Index) != IndexToLabel.end();
             }
-            void insert(const lq::label& label, int qubit) {
-                if (this->LabelToQubit.find(label) != this->LabelToQubit.end() || this->isValuePresent(qubit)) {
-                    throw std::invalid_argument("Duplicate label or qubit");
+            inline void insert(const lq::label& label, int Index) {
+                if (this->LabelToIndex.find(label) != this->LabelToIndex.end() || this->isValuePresent(Index)) {
+                    throw std::invalid_argument("Duplicate label or Index");
                 }
 
-                this->LabelToQubit[label] = qubit;
-                this->QubitToLabel[qubit] = label;
+                this->LabelToIndex[label] = Index;
+                this->IndexToLabel[Index] = label;
             }
         public:
-            std::size_t inline get_size() const{
+            std::size_t inline getSize() const{
                 return this->size;
             }
             
-            label2qubit(const std::set<lq::label>& labels) {
-                int qubit = 0;
+            LabelIndexBiMap(const std::set<lq::label>& labels) {
+                int Index = 0;
                 for (const auto& label : labels) {
-                    insert(label, qubit++);
+                    insert(label, Index++);
                 }
-                this->size = qubit;
+                this->size = Index;
             }
 
-            label2qubit(const std::unordered_set<lq::label>& labels) {
-                int qubit = 0;
+            LabelIndexBiMap(const std::unordered_set<lq::label>& labels) {
+                int Index = 0;
                 for (const auto& label : labels) {
-                    insert(label, qubit++);
+                    insert(label, Index++);
                 }
-                this->size = qubit;
+                this->size = Index;
             }
 
             void message() const{
                 std::cout << "overall: " << this->size << "pairs" << std::endl;
-                for (const auto& pair : this->LabelToQubit) {
-                    std::cout << "label: " << pair.first << ", qubit: " << pair.second << std::endl;
+                for (const auto& pair : this->LabelToIndex) {
+                    std::cout << "label: " << pair.first << ", Index: " << pair.second << std::endl;
                 }
             }       
             
-            
-
-            label get_label(int qubit) const {
-                auto it = this->QubitToLabel.find(qubit);
-                if (it == this->QubitToLabel.end()) {
-                    throw std::out_of_range("qubit not found: " + std::to_string(qubit));
+            label getLabel(int Index) const {
+                auto it = this->IndexToLabel.find(Index);
+                if (it == this->IndexToLabel.end()) {
+                    throw std::out_of_range("Index not found: " + std::to_string(Index));
                 }
                 return it->second;
             }
 
-            int get_qubit(const lq::label& label) const {
-                auto it = this->LabelToQubit.find(label);
-                if (it == this->LabelToQubit.end()) {
+            int getIndex(const lq::label& label) const {
+                auto it = this->LabelToIndex.find(label);
+                if (it == this->LabelToIndex.end()) {
                     throw std::out_of_range("label not found: " + std::to_string(label));
                 }
                 return it->second;
@@ -95,31 +93,31 @@ namespace lq{
 
     class LFMatrix{
         private:
-            xt::xarray<bool> A;
-            label2qubit l2q;
+            xt::xarray<bool> data;
+            LabelIndexBiMap biMap;
 
             bool inline SizeEqual() const{
-                return this->A.dimension() == 2 && A.shape()[0] == l2q.get_size();
+                return this->data.dimension() == 2 && data.shape()[0] == biMap.getSize();
             }
 
         public:
 
-        LFMatrix(const xt::xarray<bool>& A_, const label2qubit& l2q_) : A(A_), l2q(l2q_) {}
+        LFMatrix(const xt::xarray<bool>& data_, const LabelIndexBiMap& biMap_) : data(data_), biMap(biMap_) {}
 
         void transpose(){
-            this->A = xt::transpose(this->A);
+            this->data = xt::transpose(this->data);
         }
 
-        xt::xarray<bool> get_data() const {
-            return this->A;
+        xt::xarray<bool> getData() const {
+            return this->data;
         }
 
-        label2qubit get_l2q() const {
-            return this->l2q;
+        LabelIndexBiMap getBiMap() const {
+            return this->biMap;
         }
 
-        bool inline get_ele(size_t i, size_t j) const{
-            return this->A(i,j);
+        bool inline at(size_t i, size_t j) const{
+            return this->data(i,j);
         }
 
         void mod2add(label i, label j){
@@ -129,9 +127,9 @@ namespace lq{
             if(not this->SizeEqual()){
                 throw std::invalid_argument("Erreur");
             }
-            int row_i = this->l2q.get_qubit(i);
-            int row_j = this->l2q.get_qubit(j);
-            xt::view(A, row_i, xt::all()) = xt::view(A, row_i, xt::all()) ^ xt::view(A, row_j, xt::all());
+            int row_i = this->biMap.getIndex(i);
+            int row_j = this->biMap.getIndex(j);
+            xt::view(data, row_i, xt::all()) = xt::view(data, row_i, xt::all()) ^ xt::view(data, row_j, xt::all());
             return ;
         }
 
@@ -141,14 +139,14 @@ namespace lq{
         }
 
         bool isEye() const{
-            if (this->A.dimension() != 2) {
+            if (this->data.dimension() != 2) {
                 throw std::invalid_argument("Erreur");
             }
-            size_t rows = this->A.shape()[0];
-            size_t cols = this->A.shape()[1];
+            size_t rows = this->data.shape()[0];
+            size_t cols = this->data.shape()[1];
             for (size_t i = 0; i < rows; ++i) {
                 for (size_t j = 0; j < cols; ++j) {
-                    if (i != j && this->A(i, j)) {
+                    if (i != j && this->data(i, j)) {
                         return false;
                     }
                 }
@@ -157,13 +155,13 @@ namespace lq{
         }
 
         bool isGood() const{
-            if (this->A.dimension() != 2) {
+            if (this->data.dimension() != 2) {
                 throw std::invalid_argument("Erreur");
             }
-            size_t rows = this->A.shape()[0];
+            size_t rows = this->data.shape()[0];
             for (size_t i = 0; i < rows; ++i) {
                 for (size_t j = 0; j < i; ++j) {
-                    if (this->A(i, j)) {
+                    if (this->data(i, j)) {
                         return false;
                     }
                 }

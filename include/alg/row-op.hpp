@@ -20,9 +20,9 @@ namespace lq {
         if (root == nullptr) return {};
         std::vector<std::pair<label,label>> gates, temp;
 
-        for (auto child : root->get_children()) {
-            gates.push_back(std::make_pair(root->get_data(),child->get_data()));
-            if(leaves.find(child->get_data()) == leaves.end()){
+        for (auto child : root->getChildren()) {
+            gates.push_back(std::make_pair(root->getData(),child->getData()));
+            if(leaves.find(child->getData()) == leaves.end()){
                 temp = topDown1(child, leaves);
                 gates.insert(gates.end(),temp.begin(),temp.end());
             }
@@ -35,8 +35,8 @@ namespace lq {
         if (root == nullptr) return {};
         std::vector<std::pair<label,label>> gates, temp;
 
-        for (auto child : root->get_children()) {
-            if(leaves.find(child->get_data()) == leaves.end()){
+        for (auto child : root->getChildren()) {
+            if(leaves.find(child->getData()) == leaves.end()){
                 temp = topDown1(child, leaves);
                 gates.insert(gates.end(),temp.begin(),temp.end());
             }
@@ -50,9 +50,9 @@ namespace lq {
         if (root == nullptr) return {};
         std::vector<std::pair<label,label>> gates, temp;
 
-        for (auto child : root->get_children()) {
-            if(leaves.find(child->get_data()) == leaves.end()){
-                gates.push_back(std::make_pair(root->get_data(),child->get_data()));
+        for (auto child : root->getChildren()) {
+            if(leaves.find(child->getData()) == leaves.end()){
+                gates.push_back(std::make_pair(root->getData(),child->getData()));
                 temp = bottomUp2(child, leaves);
                 gates.insert(gates.end(),temp.begin(),temp.end());
             }
@@ -65,8 +65,8 @@ namespace lq {
         if (root == nullptr) return {};
         std::vector<std::pair<label,label>> gates, temp;
 
-        for (auto child : root->get_children()) {
-            if(leaves.find(child->get_data()) == leaves.end()){
+        for (auto child : root->getChildren()) {
+            if(leaves.find(child->getData()) == leaves.end()){
                 temp = bottomUp2(child, leaves);
                 gates.insert(gates.end(),temp.begin(),temp.end());
             }
@@ -121,7 +121,7 @@ namespace lq {
             }
             // if(alg==4){
             //     for(auto leaf: terminals){
-            //         mod2add(A,label2qubit.get_qubit(root->get_data()),label2qubit.get_qubit(leaf));
+            //         mod2add(A,LabelIndexBiMap.getIndex(root->getData()),LabelIndexBiMap.getIndex(leaf));
             //     }
             // }
         }

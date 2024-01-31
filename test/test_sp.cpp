@@ -26,7 +26,7 @@ int main(){
     auto Ts = separate(node1,terminals,AlgSignal::diag);
     for(auto T:Ts){
         std::cout << "\nroot: ";
-        std::cout << T.root->get_data() << std::endl;
+        std::cout << T.root->getData() << std::endl;
         std::cout << "leave: ";
         for(auto leaf:T.leaves){
             std::cout << leaf << " ";

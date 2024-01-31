@@ -30,10 +30,10 @@ int main(){
                          {1, 1, 0, 1, 0, 0},
                          {1, 1, 1, 1, 0, 0},
                          {0, 1, 0, 1, 0, 1}};
-    label2qubit label2qubit(std::set<label>{1, 2, 3, 4, 5, 6});
-    label2qubit.message();
+    LabelIndexBiMap biMap(std::set<label>{1, 2, 3, 4, 5, 6});
+    biMap.message();
     auto Ts = separate(node1,terminals,AlgSignal::diag);
-    LFMatrix A_ = LFMatrix(A,label2qubit);
+    LFMatrix A_ = LFMatrix(A,biMap);
     rowOp(A_,Ts,AlgSignal::diag);
     std::cout << A << std::endl;
     return 0;

@@ -22,10 +22,10 @@ namespace lq
 
         public:
         Sttree(label value) : data(value) {}
-        label inline get_data(){
+        label inline getData(){
             return this->data;
         }
-        std::set<Sttree*> inline get_children(){
+        std::set<Sttree*> inline getChildren(){
             return this->children;
         }
 

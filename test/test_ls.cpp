@@ -1,3 +1,10 @@
+/*
+ * @Author       : coldcat(by.gdc@outlook.com)
+ * @Version      : V1.0
+ * @Date         : 2024-01-27 22:26:28
+ * @Description  : 
+ * @TODO         : 
+ */
 #include "alg/linear-tf.hpp"
 #include "xtensor/xarray.hpp"
 #include "xtensor/xio.hpp"
@@ -20,12 +27,12 @@ int main(){
                          {1, 1, 0, 1, 0, 0},
                          {1, 1, 1, 1, 0, 0},
                          {0, 1, 0, 1, 0, 1}};
-    label2qubit label2qubit(std::set<label>{1, 2, 3, 4, 5, 6});
-    label2qubit.message();
-    LFMatrix A_ = LFMatrix(A,label2qubit);
+    LabelIndexBiMap biMap(std::set<label>{1, 2, 3, 4, 5, 6});
+    biMap.message();
+    LFMatrix A_ = LFMatrix(A,biMap);
     linearSynth(A_,&g);
     std::cout << std::endl;
-    std::cout << A_.get_data() << std::endl;
+    std::cout << A_.getData() << std::endl;
     std::cout << std::boolalpha << "good ? " << A_.isGood() << std::endl;
     std::cout << std::boolalpha << "finish ? " << A_.isEye() << std::endl;
     return 0;

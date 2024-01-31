@@ -37,7 +37,7 @@ public:
         return this->vertices.find(verite) != this->vertices.end();
     }
 
-    std::set<label> get_neigh(label v) const{
+    std::set<label> getNeigh(label v) const{
         if(inGraph(v)){
             return this->neigh.at(v);
         }

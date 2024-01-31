@@ -10,7 +10,7 @@ int main() {
     insertChild(root, node3);
     Sttree* node4 = new Sttree(4);
     root->insertChild(node4);
-    auto it = root->get_children().begin();
+    auto it = root->getChildren().begin();
 
     // Inserting children for the first child of root
     Sttree* first_child = *it;
