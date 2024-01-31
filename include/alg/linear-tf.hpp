@@ -21,10 +21,9 @@ namespace lq{
         for(int row = 0 ; row < A.getData().shape()[0]; ++row){
             if(A.at(row,col)){
                 terminals.insert(biMap.getLabel(row));
-                std::cout << biMap.getLabel(row) <<" ";
             }
         }
-        std::cout << std::endl;
+        if(terminals.empty()) throw std::runtime_error("erruer");
         auto path = g->findPath({pivot},terminals);
         std::reverse(path.begin(), path.end());
         for(int i = 0; i < path.size()-1; ++i){
@@ -49,39 +48,31 @@ namespace lq{
         for(int col = 0; col < n; ++col){
             if(!A.at(col,col)){
                 TransformMatrix(A,g_,col);
-                std::cout<<col<<":\n" << A.getData() << std::endl;
             }
             // find terminals
             label pivot = biMap.getLabel(col);
-            std::cout <<"pivot: "<< pivot << std::endl;
-
             std::set<label> terminals;
             for(int row = col+1; row < n; ++row){
                 if(A.at(row,col)){
                     terminals.insert(biMap.getLabel(row));
-                    std::cout << biMap.getLabel(row) <<" ";
                 }
             }
             std::cout << std::endl;
             if(!terminals.empty()){
                 auto st = g_->SteinerTree(pivot,terminals);
-                st->traverse();
-                std::cout << std::endl;
                 auto Ts = separate(st,terminals,AlgSignal::diag);
                 rowOp(A,Ts,AlgSignal::diag);
             }
             g_->deleteVertex(biMap.getLabel(col));
-            std::cout << A.getData() <<std::endl;
-            // After constructing the tree, remove 'col' from G'.
         }
 
 
         A.transpose();
         g_ = g->clone();
+        std::cout << "-----------------------\n";
         for(int col = 0; col < n; ++col){
             if(!A.at(col,col)){
                 TransformMatrix(A,g_,col);
-                std::cout<<col<<":\n"<< A.getData() << std::endl;
             }
             // find terminals
             label pivot = biMap.getLabel(col);
@@ -101,18 +92,26 @@ namespace lq{
                 std::cout << std::endl;
                 auto Ts = separate(st,terminals,AlgSignal::propagated);
                 rowOp(A,Ts,AlgSignal::propagated);
-            }
 
-            // Steiner Tree Construction: (currently commented out)
-            // This section is intended to find a Steiner tree that connects the set of terminal nodes.
-            // The tree minimizes the total length of the paths from each terminal to the root.
-            // rowOp(A,terminals,St,2);
-            std::vector<int> B(n);
-            // for(int row = col+1; row < A.shape()[1]; ++row){
-            //     if(terminals.find(col)!=terminals.end()){
-            //         B.at(col) = col;
-            //     }
-            // }
+                for(auto T: Ts){
+                    label r = T.root->getData();
+                    for(label leaf: T.leaves){
+                        if(biMap.getIndex(leaf) < biMap.getIndex(r)){
+                            auto path = g_->findPath({r},{leaf});
+                            Sttree* root = new Sttree(r);
+                            Sttree* current = root;
+                            for(auto it = std::next(path.begin()); it != path.end(); ++it) {
+                                auto u = *it;
+                                current->insertChild(u);
+                                current = *current->getChildren().begin();
+                            }
+                            std::vector<lq::SubTree> temp = {{root,{path.back()}}};
+                            rowOp(A,temp,AlgSignal::propagated);
+                        }
+                    }
+                    std::cout << std::endl;
+                }
+            }
 
             // for(path qubit in Ts) do something
 
