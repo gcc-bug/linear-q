@@ -97,7 +97,7 @@ namespace lq{
             LabelIndexBiMap biMap;
 
             bool inline SizeEqual() const{
-                return this->data.dimension() == 2 && data.shape()[0] == biMap.getSize();
+                return this->data.dimension() == 2 && data.shape()[1] == biMap.getSize();
             }
 
         public:
@@ -106,6 +106,14 @@ namespace lq{
 
         void transpose(){
             this->data = xt::transpose(this->data);
+        }
+
+        inline size_t row() const{
+            return this->data.shape()[0];
+        }
+
+        inline size_t col() const{
+            return this->data.shape()[1];
         }
 
         xt::xarray<bool> getData() const {
