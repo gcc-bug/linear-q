@@ -11,7 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "../Config.hpp"
+#include "Config.hpp"
 
 namespace lq
 {

@@ -17,7 +17,7 @@
 #include <map>
 #include <utility>
 #include "graph/tree.hpp"
-#include "../Config.hpp"
+#include "Config.hpp"
 #include "typedef.hpp"
 
 namespace lq{

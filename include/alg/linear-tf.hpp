@@ -20,41 +20,39 @@ namespace lq{
         int startRow = searchAfterColumn ? targetColumn + 1 : 0;
         int totalRows = A.row(); 
         for (int row = startRow; row < totalRows; ++row) {
-            std::cout << row << std::endl;
             if (A.at(row, targetColumn)) {
                 terminalLabels.insert(labelMap.getLabel(row));
-                std::cout << labelMap.getLabel(row) << " ";
             }
         }
         return terminalLabels;
     }
-    void TransformMatrix(LFMatrix& A,const Graph& g, const size_t col){
+    std::vector<CNOTGate> TransformMatrix(LFMatrix& A,const Graph& g, const size_t col){
         const LabelIndexBiMap& biMap = A.getBiMap();
+        std::vector<CNOTGate> res;
         label pivot = biMap.getLabel(col);
         std::set<label> terminals = findTerminals(A,col,false);
     
         if(terminals.empty()) throw std::runtime_error("erruer");
         auto path = g.findPath({pivot},terminals);
         std::reverse(path.begin(), path.end());
+        
         for(int i = 0; i < path.size()-1; ++i){
-            A.CNOT_(path[i],path[i+1]);
+            res.push_back(A.CNOT_(path[i],path[i+1]));
         }
+        return res;
     }
 
-    void processColumn(LFMatrix& A,const Graph& g, const size_t col, AlgSignal signal) {
-        //TODO: fix bug here
+    std::vector<CNOTGate> processColumn(LFMatrix& A,const Graph& g, const size_t col, AlgSignal signal) {
         auto terminals = findTerminals(A,col,true);
         const LabelIndexBiMap& labelMap = A.getBiMap();
+        std::vector<CNOTGate> res, temp_gates;
+
         label pivot = labelMap.getLabel(col);
-        std::cout << "pivot: " << pivot << std::endl;
         if(!terminals.empty()){
-            for(auto it: terminals){
-                std::cout << it << " ";
-            }
-            std::cout << std::endl;
             auto st = g.SteinerTree(pivot,terminals);
             auto Ts = separate(st,terminals,signal);
-            rowOp(A,Ts,signal);
+            temp_gates = rowOp(A,Ts,signal);
+            res.insert(res.end(),temp_gates.begin(),temp_gates.end());
 
             if(signal == AlgSignal::propagated){
                 for(auto T: Ts){
@@ -65,22 +63,28 @@ namespace lq{
                             Sttree* root = new Sttree(r);
                             root->insertChild(g.pathToTree(path));
                             std::vector<lq::SubTree> temp = {{root,{path.back()}}};
-                            rowOp(A,temp,signal);
+                            temp_gates = rowOp(A,temp,signal);
+                            res.insert(res.end(),temp_gates.begin(),temp_gates.end());
                         }
                     }
                 }
             }
         }
+        return res;
     }
 
-    void processMatrix(LFMatrix& A, Graph& g, AlgSignal alg) {
+    std::vector<CNOTGate> processMatrix(LFMatrix& A, Graph& g, AlgSignal alg) {
+        std::vector<CNOTGate> res,temp_gates;
         for (size_t col = 0; col < A.col(); ++col) {
             if(!A.at(col,col)){
-                TransformMatrix(A,g,col);
+                temp_gates = TransformMatrix(A, g, col);
+                res.insert(res.end(), temp_gates.begin(), temp_gates.end());
             }
-            processColumn(A, g, col, alg);
+            temp_gates = processColumn(A, g, col, alg);
+            res.insert(res.end(), temp_gates.begin(), temp_gates.end());
             g.deleteVertex(A.getBiMap().getLabel(col));
         }
+        return res;
     }
 
     
@@ -88,6 +92,7 @@ namespace lq{
     void linearSynth(LFMatrix& A,const Graph* g){
         int n = A.getData().shape()[0];
         const LabelIndexBiMap& biMap = A.getBiMap();
+        std::vector <CNOTGate> res ;
         // add x gate
         // for(int row =0; row < A.shape()[1]; ++row){
         //     if(A(n,row)){
@@ -99,10 +104,17 @@ namespace lq{
 
         // Cloning the graph: Create a duplicate G' of the graph G for manipulation
         Graph* g_ = g->clone();
-        processMatrix(A,*g_,AlgSignal::diag);
+        res = processMatrix(A,*g_,AlgSignal::diag);
+        for(auto it: res){
+            it.assemble(std::cout) ;
+        }
         A.transpose();
         g_ = g->clone();
-        processMatrix(A,*g_,AlgSignal::propagated);
+        res = processMatrix(A,*g_,AlgSignal::propagated);
+        for(auto it: res){
+            it.reverse();
+            it.assemble(std::cout) ;
+        }
     }
 }
 #endif /* ALG_LINEAR_SYNTH */

@@ -19,7 +19,7 @@
 #include <unordered_set>
 #include <set>
 #include <optional>
-#include "../Config.hpp"
+#include "Config.hpp"
 #include "tree.hpp"
 
 namespace lq{

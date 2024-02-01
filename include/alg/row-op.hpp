@@ -12,7 +12,7 @@
 #include <set>
 #include <iostream>
 #include <string>
-#include "../Config.hpp"
+#include "Config.hpp"
 #include "typedef.hpp"
 
 namespace lq {
@@ -75,45 +75,43 @@ namespace lq {
         return gates;
     }
 
-    void rowOp(LFMatrix& A, std::vector<SubTree>& Ts, AlgSignal alg) {
+    std::vector<CNOTGate> rowOp(LFMatrix& A, std::vector<SubTree>& Ts, AlgSignal alg) {
         std::vector<std::pair<label,label>> paths;
+        std::vector<CNOTGate> res;
         for(label i = Ts.size()-1; i>=0; --i){
             if(alg != AlgSignal::diag){
-                std::cout << "Bottom Up 1" << std::endl;
+                // Bottom Up 1
                 paths = bottomUp1(Ts.at(i).root,Ts.at(i).leaves);
                 std::reverse(paths.begin(),paths.end());
                 for(auto labels: paths){
-                    CNOT(labels.first,labels.second);
+                    res.push_back(CNOTGate(labels.first,labels.second));
                     if(alg != AlgSignal::phase){
                         A.mod2add(labels.second,labels.first);
                     }
                 }   
             }
             // Top-Down-1
-            std::cout << "Top Down 1" << std::endl;
             paths = topDown1(Ts.at(i).root,Ts.at(i).leaves);
             for(auto labels: paths){
-                CNOT(labels.first,labels.second);
+                res.push_back(CNOTGate(labels.first,labels.second));
                 if(alg != AlgSignal::phase){
                     A.mod2add(labels.second,labels.first);
                 }
             }
             // Bottom-Up-2
-            std::cout << "Bottom up 2" << std::endl;
             paths = bottomUp2(Ts.at(i).root,Ts.at(i).leaves);
             std::reverse(paths.begin(),paths.end());
             for(auto labels: paths){
-                CNOT(labels.first,labels.second);
+                res.push_back(CNOTGate(labels.first,labels.second));
                 if(alg != AlgSignal::phase){
                     A.mod2add(labels.second,labels.first);
                 }
             }
             if(alg != AlgSignal::diag){
                 // Top-Down-2
-                std::cout << "Top Down 2" << std::endl;
                 paths = topDown2(Ts.at(i).root,Ts.at(i).leaves);
                 for(auto labels: paths){
-                    CNOT(labels.first,labels.second);
+                    res.push_back(CNOTGate(labels.first,labels.second));
                     if(alg != AlgSignal::phase){
                         A.mod2add(labels.second,labels.first);
                     }
@@ -125,6 +123,7 @@ namespace lq {
             //     }
             // }
         }
+        return res;
     }
 }
 

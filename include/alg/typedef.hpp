@@ -16,16 +16,15 @@
 #include "xtensor/xview.hpp"
 #include "xtensor/xio.hpp"
 #include "xtensor/xbuilder.hpp" 
-#include "../Config.hpp"
+#include "Config.hpp"
+#include "gate/gate.hpp"
 namespace lq{
     enum class AlgSignal{
         diag, // alg<- 1, Top Down 1, Bottom up 2
         propagated, // alg<-2,3, Bottom Up 1, Top Down 1, Bottom up 2, Top-Down-2
         phase //alg<-4, Bottom Up 1, Top Down 1, Bottom up 2, Top-Down-2
     };
-    void CNOT(label control, label target) {
-            std::cout << "CNOT " << control <<" " << target << std::endl;
-    }
+    
     struct SubTree {
         Sttree* root;
         std::set<label> leaves;
@@ -141,9 +140,9 @@ namespace lq{
             return ;
         }
 
-        void CNOT_(label control, label target){
-            CNOT(control,target);
+        CNOTGate CNOT_(label control, label target){
             this->mod2add(target,control);
+            return CNOTGate(control,target);
         }
 
         bool isEye() const{
