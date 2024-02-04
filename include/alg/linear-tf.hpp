@@ -108,14 +108,13 @@ namespace lq{
         g_ = g->clone();
         auto y2 = processMatrix(A,*g_,AlgSignal::propagated);
         
-        std::reverse(y2.begin(),y2.end());
-        // return y2;
-
-        for(auto it: y1){
-            it.reverse();
+        std::reverse(y1.begin(),y1.end());
+        for(CNOTGate& gate: y2){
+            // Iterating by value
+            gate.reverse();
         }
-        y1.insert(y1.end(),y2.begin(),y2.end());
-        return y1;
+        y2.insert(y2.end(),y1.begin(),y1.end());
+        return y2;
     }
 }
 #endif /* ALG_LINEAR_SYNTH */
