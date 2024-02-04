@@ -4,7 +4,7 @@
 Quantum Linear Synthesis is a project focused on synthesizing quantum circuits, with a primary optimization goal of reducing the CNOT count for NISQ (Noisy Intermediate-Scale Quantum) devices. This is crucial for advancing quantum computing efficiency and reliability.
 
 ## Installation of Dependencies
-Before installation, ensure you have a basic understanding of Linux or Windows command line interfaces and package management systems. For detailed instructions on installing dependencies on both Linux and Windows, refer to our [dependencies documentation](dependencies.md).
+Before installation, ensure you have a basic understanding of Linux or Windows command line interfaces and package management systems. For detailed instructions on installing dependencies on both Linux and Windows, refer to our [dependencies documentation](./docs/dependencies.md).
 
 ## Usage
 <!-- TODO:[Add instructions or examples on how to use the software or run tests.] -->
