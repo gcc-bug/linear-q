@@ -10,7 +10,6 @@ int main(){
     g.addEdge(4,5);
     g.addEdge(5,6);
 
-    g.exportToDot("graph");
     xt::xarray<bool> A = {{1, 1, 0, 1, 1, 0},
                          {0, 0, 1, 1, 0, 1},
                          {1, 0, 1, 0, 1, 0},

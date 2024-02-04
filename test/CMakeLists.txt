@@ -6,6 +6,7 @@ set(TEST_SOURCES
     test_ro.cpp
     test_ls.cpp
     test_sp.cpp
+    test_pw.cpp
     # Add new test files here
 )
 
