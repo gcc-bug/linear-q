@@ -1,7 +1,4 @@
-#include "graph/tree.hpp"
 #include "alg/seprate.hpp"
-#include "xtensor/xarray.hpp"
-#include "xtensor/xio.hpp"
 #include <set>
 #include <string>
 using namespace lq;

@@ -8,11 +8,6 @@
 #ifndef ALG_ROW_OP
 #define ALG_ROW_OP
 
-#include <vector>
-#include <set>
-#include <iostream>
-#include <string>
-#include "Config.hpp"
 #include "typedef.hpp"
 
 namespace lq {

@@ -7,10 +7,6 @@
  */
 #ifndef ST_TREE_CLASS
 #define ST_TREE_CLASS
-#include <set>
-#include <iostream>
-#include <fstream>
-#include <string>
 #include "Config.hpp"
 
 namespace lq

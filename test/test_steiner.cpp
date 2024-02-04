@@ -1,17 +1,4 @@
 #include"graph/graph.hpp"
-#include <iostream>
-#include <map>
-#include <unordered_set>
-
-template<typename T>
-bool isSubset(const std::unordered_set<T>& setA, const std::unordered_set<T>& SetB) {
-    for (const T& element : setA) {
-        if (SetB.find(element) == SetB.end()) {
-            return false; // Element not found in orderedSet
-        }
-    }
-    return true;
-}
 using namespace lq;
 int main() {
     Graph gridGraph = Graph(); // 12 vertices for the 3x4 grid

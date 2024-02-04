@@ -1,6 +1,4 @@
 #include "alg/linear-tf.hpp"
-#include "xtensor/xarray.hpp"
-#include "xtensor/xio.hpp"
 
 using namespace lq;
 int main(){

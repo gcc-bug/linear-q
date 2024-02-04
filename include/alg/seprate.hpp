@@ -8,16 +8,6 @@
 #ifndef Alg_SEP
 #define Alg_SEP
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <unordered_set>
-#include <set>
-#include <queue>
-#include <map>
-#include <utility>
-#include "graph/tree.hpp"
-#include "Config.hpp"
 #include "typedef.hpp"
 
 namespace lq{

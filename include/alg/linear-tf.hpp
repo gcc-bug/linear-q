@@ -8,7 +8,6 @@
 #ifndef ALG_LINEAR_SYNTH
 #define ALG_LINEAR_SYNTH
 
-#include "graph/graph.hpp"
 #include "row-op.hpp"
 #include "seprate.hpp"
 #include "typedef.hpp"

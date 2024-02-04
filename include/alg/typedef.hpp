@@ -7,16 +7,16 @@
  */
 #ifndef TYPE_DEF
 #define TYPE_DEF
-
-#include <map>
-#include <set>
 #include <unordered_set>
-#include <stdexcept>
+
 #include "xtensor/xarray.hpp"
 #include "xtensor/xview.hpp"
 #include "xtensor/xio.hpp"
 #include "xtensor/xbuilder.hpp" 
+
 #include "Config.hpp"
+#include "graph/tree.hpp"
+#include "graph/graph.hpp"
 #include "gate/gate.hpp"
 namespace lq{
     enum class AlgSignal{
@@ -31,13 +31,13 @@ namespace lq{
     };
     class LabelIndexBiMap {
         private:
-            std::map<lq::label, int> LabelToIndex;
-            std::map<int, lq::label> IndexToLabel;
+            std::map<label, int> LabelToIndex;
+            std::map<int, label> IndexToLabel;
             std::size_t size;
             inline bool isValuePresent(int Index) const {
                 return IndexToLabel.find(Index) != IndexToLabel.end();
             }
-            inline void insert(const lq::label& label, int Index) {
+            inline void insert(const label& label, int Index) {
                 if (this->LabelToIndex.find(label) != this->LabelToIndex.end() || this->isValuePresent(Index)) {
                     throw std::invalid_argument("Duplicate label or Index");
                 }
@@ -50,7 +50,7 @@ namespace lq{
                 return this->size;
             }
             
-            LabelIndexBiMap(const std::set<lq::label>& labels) {
+            LabelIndexBiMap(const std::set<label>& labels) {
                 int Index = 0;
                 for (const auto& label : labels) {
                     insert(label, Index++);
@@ -58,7 +58,7 @@ namespace lq{
                 this->size = Index;
             }
 
-            LabelIndexBiMap(const std::unordered_set<lq::label>& labels) {
+            LabelIndexBiMap(const std::unordered_set<label>& labels) {
                 int Index = 0;
                 for (const auto& label : labels) {
                     insert(label, Index++);
@@ -81,7 +81,7 @@ namespace lq{
                 return it->second;
             }
 
-            int getIndex(const lq::label& label) const {
+            int getIndex(const label& label) const {
                 auto it = this->LabelToIndex.find(label);
                 if (it == this->LabelToIndex.end()) {
                     throw std::out_of_range("label not found: " + std::to_string(label));

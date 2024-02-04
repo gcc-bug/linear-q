@@ -1,10 +1,5 @@
-#include "graph/tree.hpp"
 #include "alg/row-op.hpp"
 #include "alg/seprate.hpp"
-#include "xtensor/xarray.hpp"
-#include "xtensor/xio.hpp"
-#include <set>
-#include <string>
 using namespace lq;
 int main(){
     Sttree* node1 = new Sttree(1);

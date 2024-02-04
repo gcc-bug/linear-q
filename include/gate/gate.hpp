@@ -9,15 +9,14 @@
 #define GATE
 
 #include "Config.hpp"
-#include <ostream>
 inline std::string mk_idt(unsigned int indent) {
     return std::string(indent*4, ' ');
 }
 class CNOTGate {
 private:
-    lq::label ctrl, targ;
+    label ctrl, targ;
 public:
-    CNOTGate(lq::label ctrl, lq::label targ) {
+    CNOTGate(label ctrl, label targ) {
         this->ctrl = ctrl;
         this->targ = targ;
     }
