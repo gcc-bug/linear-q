@@ -162,11 +162,13 @@ public:
         std::set<std::pair<label, std::vector<label>>> visited;
 
         // Initialize queue with start vertices
-        for (const auto& verite : start_vertices) {
+        for (auto it = start_vertices.rbegin(); it != start_vertices.rend(); ++it) {
+            const auto& verite = *it;
             std::vector<label> initialPath = {verite};
             queue.push({verite, initialPath});
             visited.insert({verite, initialPath});
         }
+
 
         while (!queue.empty()) {
             auto front = queue.front();
