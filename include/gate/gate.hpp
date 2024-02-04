@@ -38,7 +38,11 @@ public:
     }
 
     void reverse(){
-          std::swap(this->ctrl,this->targ);
+        std::swap(this->ctrl,this->targ);
+    }
+
+    std::pair<label,label> getLabel() const{
+        return {this->ctrl,this->targ};
     }
 };
 

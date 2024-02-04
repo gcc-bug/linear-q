@@ -1,5 +1,4 @@
 #include "alg/linear-tf.hpp"
-
 using namespace lq;
 int main(){
     Graph g = Graph();
@@ -21,10 +20,18 @@ int main(){
     LabelIndexBiMap biMap(std::set<label>{1, 2, 3, 4, 5, 6});
     biMap.message();
     LFMatrix A_ = LFMatrix(A,biMap);
-    linearSynth(A_,&g);
-    std::cout << std::endl;
-    std::cout << A_.getData() << std::endl;
+    auto Cs = linearSynth(A_,&g);
+
     std::cout << std::boolalpha << "good ? " << A_.isGood() << std::endl;
     std::cout << std::boolalpha << "finish ? " << A_.isEye() << std::endl;
+    LFMatrix CheckA = LFMatrix(xt::eye(biMap.getSize()),biMap);
+    for(auto c: Cs){
+        auto [ctrl,targ] = c.getLabel();
+        CheckA.CNOT_(ctrl,targ);
+    }
+    std::cout << xt::transpose(A) << std::endl;
+    std::cout << CheckA.getData() << std::endl;
+    auto res = CheckA.getData() == xt::transpose(A);
+    std::cout << std::boolalpha << res << std::endl;
     return 0;
 }

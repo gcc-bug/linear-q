@@ -88,10 +88,8 @@ namespace lq{
 
     
     
-    void linearSynth(LFMatrix& A,const Graph* g){
+    std::vector<CNOTGate> linearSynth(LFMatrix& A,const Graph* g){
         int n = A.getData().shape()[0];
-        const LabelIndexBiMap& biMap = A.getBiMap();
-        std::vector <CNOTGate> res ;
         // add x gate
         // for(int row =0; row < A.shape()[1]; ++row){
         //     if(A(n,row)){
@@ -103,17 +101,21 @@ namespace lq{
 
         // Cloning the graph: Create a duplicate G' of the graph G for manipulation
         Graph* g_ = g->clone();
-        res = processMatrix(A,*g_,AlgSignal::diag);
-        for(auto it: res){
-            it.assemble(std::cout) ;
-        }
+        auto y1 = processMatrix(A,*g_,AlgSignal::diag);
+
         A.transpose();
+        std::cout << A.getData() << std::endl;
         g_ = g->clone();
-        res = processMatrix(A,*g_,AlgSignal::propagated);
-        for(auto it: res){
+        auto y2 = processMatrix(A,*g_,AlgSignal::propagated);
+        
+        std::reverse(y2.begin(),y2.end());
+        // return y2;
+
+        for(auto it: y1){
             it.reverse();
-            it.assemble(std::cout) ;
         }
+        y1.insert(y1.end(),y2.begin(),y2.end());
+        return y1;
     }
 }
 #endif /* ALG_LINEAR_SYNTH */
