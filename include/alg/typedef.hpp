@@ -25,9 +25,29 @@ namespace lq{
         phase //alg<-4, Bottom Up 1, Top Down 1, Bottom up 2, Top-Down-2
     };
     
-    struct SubTree {
-        Sttree* root;
-        std::set<label> leaves;
+    class SubTree {
+        private:
+        // TODO: use unique_ptr instead of pointer
+            Sttree* root;
+            std::set<label> leaves;
+        public:
+            SubTree(Sttree* root_, std::set<label> leaves_): root(root_), leaves(leaves_){}
+
+            void addLeaf(label leaf){
+                this->leaves.insert(leaf);
+            }
+
+            inline bool isLeaf(label leaf)const {
+                return this->leaves.find(leaf) != this->leaves.end();
+            }
+
+            inline Sttree* getRoot(){
+                return this->root;
+            }
+
+            inline std::set<label> getLeaves(){
+                return this->leaves;
+            }
     };
     class LabelIndexBiMap {
         private:

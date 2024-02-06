@@ -38,7 +38,7 @@ namespace lq{
                 queue.pop();
                 for(auto u: currentNode->getChildren()){
                     if (terminals.find(u->getData())!=terminals.end()) {
-                        T_rootS_root.leaves.insert(u->getData());
+                        T_rootS_root.addLeaf(u->getData());
                         if(u->getChildren().size()>0){
                             R.push(u);
                         }
@@ -50,8 +50,9 @@ namespace lq{
             }
 
             if (alg == AlgSignal::phase) {
-                // TODO: need modify
-                T.push_back(T_rootS_root);
+                // for(auto& u: T_rootS_root.leaves){
+                    // 
+                // }
             } else {
                 T.push_back(T_rootS_root);
             }

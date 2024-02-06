@@ -54,9 +54,10 @@ namespace lq{
             res.insert(res.end(),temp_gates.begin(),temp_gates.end());
 
             if(signal == AlgSignal::propagated){
+                // TODO: optimize code structure
                 for(auto T: Ts){
-                    label r = T.root->getData();
-                    for(label leaf: T.leaves){
+                    label r = T.getRoot()->getData();
+                    for(label leaf: T.getLeaves()){
                         if(labelMap.getIndex(leaf) < labelMap.getIndex(r)){
                             auto path = g.findPath({r},{leaf});
                             Sttree* root = new Sttree(r);

@@ -73,10 +73,13 @@ namespace lq {
     std::vector<CNOTGate> rowOp(LFMatrix& A, std::vector<SubTree>& Ts, AlgSignal alg) {
         std::vector<std::pair<label,label>> paths;
         std::vector<CNOTGate> res;
-        for(label i = Ts.size()-1; i>=0; --i){
+        
+        for(int i = Ts.size()-1; i >= 0; --i){
+            Sttree* root = Ts.at(i).getRoot();
+            std::set<label> leaves = Ts.at(i).getLeaves();
             if(alg != AlgSignal::diag){
                 // Bottom Up 1
-                paths = bottomUp1(Ts.at(i).root,Ts.at(i).leaves);
+                paths = bottomUp1(root,leaves);
                 std::reverse(paths.begin(),paths.end());
                 for(auto labels: paths){
                     res.push_back(CNOTGate(labels.first,labels.second));
@@ -86,7 +89,7 @@ namespace lq {
                 }   
             }
             // Top-Down-1
-            paths = topDown1(Ts.at(i).root,Ts.at(i).leaves);
+            paths = topDown1(root,leaves);
             for(auto labels: paths){
                 res.push_back(CNOTGate(labels.first,labels.second));
                 if(alg != AlgSignal::phase){
@@ -94,7 +97,7 @@ namespace lq {
                 }
             }
             // Bottom-Up-2
-            paths = bottomUp2(Ts.at(i).root,Ts.at(i).leaves);
+            paths = bottomUp2(root,leaves);
             std::reverse(paths.begin(),paths.end());
             for(auto labels: paths){
                 res.push_back(CNOTGate(labels.first,labels.second));
@@ -104,7 +107,7 @@ namespace lq {
             }
             if(alg != AlgSignal::diag){
                 // Top-Down-2
-                paths = topDown2(Ts.at(i).root,Ts.at(i).leaves);
+                paths = topDown2(root,leaves);
                 for(auto labels: paths){
                     res.push_back(CNOTGate(labels.first,labels.second));
                     if(alg != AlgSignal::phase){
