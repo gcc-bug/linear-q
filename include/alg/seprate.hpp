@@ -50,9 +50,8 @@ namespace lq{
             }
 
             if (alg == AlgSignal::phase) {
-                // for(auto& u: T_rootS_root.leaves){
-                    // 
-                // }
+                auto temp=T_rootS_root.reverse();
+                T.insert(T.end(),temp.begin(),temp.end());
             } else {
                 T.push_back(T_rootS_root);
             }

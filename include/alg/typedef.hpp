@@ -48,6 +48,37 @@ namespace lq{
             inline std::set<label> getLeaves(){
                 return this->leaves;
             }
+
+            std::vector<SubTree> reverse() {
+                if (this->root == nullptr) {
+                    return {}; // Return empty vector if root is null
+                }
+
+                std::vector<SubTree> result;
+                std::queue<std::pair<Sttree*, Sttree*>> processingQueue; 
+                processingQueue.push({this->root, nullptr});
+
+                while (!processingQueue.empty()) {
+                    auto [currentNode, parentNode] = processingQueue.front();
+                    processingQueue.pop();
+
+                    Sttree* newNode = new Sttree(currentNode->getData()); //TODO: Consider using std::unique_ptr for newNode
+                    if (parentNode != nullptr) {
+                        newNode->insertChild(parentNode);
+                    }
+                    if (isLeaf(currentNode->getData())) { // checks if a node is a leaf
+                        SubTree temp = SubTree(newNode,{this->root->getData()}); 
+                        result.push_back(temp);
+                        continue;
+                    }
+                    for (auto& child : currentNode->getChildren()) { // Assuming getChildren returns a reference to a container
+                        processingQueue.push({child, newNode});
+                    }
+                }
+
+                return result;
+            }
+
     };
     class LabelIndexBiMap {
         private:
