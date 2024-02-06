@@ -185,8 +185,8 @@ namespace lq{
             if(not this->isValid()){
                 throw std::invalid_argument("Erreur");
             }
-            int row_i = this->biMap.getIndex(i);
-            int row_j = this->biMap.getIndex(j);
+            size_t row_i = this->biMap.getIndex(i);
+            size_t row_j = this->biMap.getIndex(j);
             xt::view(data, row_i, xt::all()) = xt::view(data, row_i, xt::all()) ^ xt::view(data, row_j, xt::all());
             return ;
         }
