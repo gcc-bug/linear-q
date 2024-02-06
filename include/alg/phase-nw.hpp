@@ -25,14 +25,14 @@ namespace lq{
     }
     class ParityTerm{
         private:
-            xt::xarray<bool> terms;
+            xt::xarray<bool> termsData;
             std::vector<bool> flips;
             std::vector<Coeffs> coeffs;
             std::set<size_t> workTerms;
             LabelIndexBiMap biMap;
 
             bool inline isValid() const {
-                auto dims = terms.shape();
+                auto dims = termsData.shape();
                 if (dims.size() != 2) return false; // Ensure there are exactly two dimensions
 
                 size_t cols = dims[1]; 
@@ -44,36 +44,40 @@ namespace lq{
                     rows == biMap.getSize();
             }
         public:
-        ParityTerm(const xt::xarray<bool>& terms_, std::vector<bool> flip_, std::vector<int> cfs, const LabelIndexBiMap& biMap_): terms(terms_),flips(flip_), biMap(biMap_){
+        ParityTerm(const xt::xarray<bool>& termsData_, std::vector<bool> flip_, std::vector<int> cfs, const LabelIndexBiMap& biMap_): termsData(termsData_),flips(flip_), biMap(biMap_){
             for(const auto& c: cfs){
                 if(isValidCoeffValue(c)) this->coeffs.push_back(static_cast<Coeffs>(c));
                 else throw std::invalid_argument("Erruer");
             }
-            for (int i = 0; i <= flip_.size(); ++i) {
-                this->workTerms.insert(i);
+            for (int term = 0; term <= flip_.size(); ++term) {
+                this->workTerms.insert(term);
             }
         }
-        ParityTerm(const xt::xarray<bool>& terms_, std::vector<bool> flip_, std::vector<Coeffs> cfs, const LabelIndexBiMap& biMap_): terms(terms_),flips(flip_), biMap(biMap_),coeffs(cfs){
-            for (int i = 0; i <= flip_.size(); ++i) {
-                this->workTerms.insert(i);
+        ParityTerm(const xt::xarray<bool>& termsData_, std::vector<bool> flip_, std::vector<Coeffs> cfs, const LabelIndexBiMap& biMap_): termsData(termsData_),flips(flip_), biMap(biMap_),coeffs(cfs){
+            for (int term = 0; term <= flip_.size(); ++term) {
+                this->workTerms.insert(term);
             }
         }
 
-        ParityTerm(const xt::xarray<bool>& terms_, const LabelIndexBiMap& biMap_) : terms(terms_), biMap(biMap_) {}
+        ParityTerm(const xt::xarray<bool>& termsData_, const LabelIndexBiMap& biMap_) : termsData(termsData_), biMap(biMap_) {}
 
-        bool at(size_t i,size_t pos) const{
-            return this->terms(pos,i);
+        inline bool onWork(const std::set<size_t>& comparedTerms) const{
+            return std::includes(this->workTerms.begin(), this->workTerms.end(), comparedTerms.begin(), comparedTerms.end());
+        }
+
+        inline bool at(size_t term,size_t pos) const{
+            return this->termsData(pos,term);
         }
 
         bool isUniform(const std::set<size_t>& compareTerms, const size_t pos) const {
             if (compareTerms.empty()) return true; // Handle empty set case
 
             auto firstTermIt = compareTerms.begin();
-            bool temp = this->terms(pos,*firstTermIt);
+            bool temp = this->termsData(pos,*firstTermIt);
 
             // Iterate over the set starting from the second element
             for (auto it = std::next(firstTermIt); it != compareTerms.end(); ++it) {
-                if (this->terms(pos,*it) != temp) return false;
+                if (this->termsData(pos,*it) != temp) return false;
             }
             return true;
         }
@@ -89,8 +93,8 @@ namespace lq{
 
         std::pair<std::set<size_t>, std::set<size_t>> splitByValue(const std::set<size_t>& compareTerms, size_t pos) const{
             std::set<size_t> P0, P1;
-            for (const auto& c : compareTerms) {
-                (this->terms(pos,c) ? P1 : P0).insert(c);
+            for (const auto& term : compareTerms) {
+                (this->termsData(pos,term) ? P1 : P0).insert(term);
             }
             // std::cout << "P0:" << std::endl;
             // for(auto p: P0){
@@ -128,7 +132,7 @@ namespace lq{
     };
 
     
-    void phaseNW(std::vector<ParityTerm> B, Graph g){
+    void phaseNW(ParityTerm B, Graph g){
         using StackType = std::tuple<std::vector<ParityTerm>, std::set<label>, label>;
         std::stack<StackType> myStack;
         // label 
