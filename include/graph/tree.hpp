@@ -18,10 +18,10 @@ namespace lq
 
         public:
         Sttree(label value) : data(value) {}
-        label inline getData(){
+        label inline getData() const{
             return this->data;
         }
-        std::set<Sttree*> inline getChildren(){
+        std::set<Sttree*> inline getChildren() const{
             return this->children;
         }
 

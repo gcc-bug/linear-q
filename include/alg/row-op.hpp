@@ -11,7 +11,7 @@
 #include "typedef.hpp"
 
 namespace lq {
-    std::vector<std::pair<label,label>> topDown1(Sttree* root,const std::set<label> leaves){
+    std::vector<std::pair<label,label>> topDown1(const Sttree* root,const std::set<label>& leaves){
         if (root == nullptr) return {};
         std::vector<std::pair<label,label>> gates, temp;
 
@@ -26,7 +26,7 @@ namespace lq {
         return gates;
     }
 
-    std::vector<std::pair<label,label>> bottomUp1(Sttree* root,const std::set<label> leaves){
+    std::vector<std::pair<label,label>> bottomUp1(const Sttree* root,const std::set<label>& leaves){
         if (root == nullptr) return {};
         std::vector<std::pair<label,label>> gates, temp;
 
@@ -41,7 +41,7 @@ namespace lq {
     }
 
 
-    std::vector<std::pair<label,label>> bottomUp2(Sttree* root,const std::set<label> leaves){
+    std::vector<std::pair<label,label>> bottomUp2(const Sttree* root,const std::set<label>& leaves){
         if (root == nullptr) return {};
         std::vector<std::pair<label,label>> gates, temp;
 
@@ -56,7 +56,7 @@ namespace lq {
         return gates;
     }
 
-    std::vector<std::pair<label,label>> topDown2(Sttree* root,const std::set<label> leaves){
+    std::vector<std::pair<label,label>> topDown2(const Sttree* root,const std::set<label>& leaves){
         if (root == nullptr) return {};
         std::vector<std::pair<label,label>> gates, temp;
 

@@ -115,7 +115,7 @@ namespace lq{
             xt::xarray<bool> data;
             LabelIndexBiMap biMap;
 
-            bool inline SizeEqual() const{
+            bool inline isValid() const{
                 return this->data.dimension() == 2 && data.shape()[1] == biMap.getSize();
             }
 
@@ -151,7 +151,7 @@ namespace lq{
             /*
             input should be label
             */
-            if(not this->SizeEqual()){
+            if(not this->isValid()){
                 throw std::invalid_argument("Erreur");
             }
             int row_i = this->biMap.getIndex(i);
