@@ -35,13 +35,13 @@ namespace lq{
                 auto dims = termsData.shape();
                 if (dims.size() != 2) return false; // Ensure there are exactly two dimensions
 
-                size_t cols = dims[1]; 
-                size_t rows = dims[0];
+                size_t termsNumber = dims[1]; 
+                size_t qubitNumber = dims[0];
 
-                return cols == flips.size() &&
-                    cols == coeffs.size() &&
-                    cols == workTerms.size() &&
-                    rows == biMap.getSize();
+                return termsNumber == flips.size() &&
+                    termsNumber == coeffs.size() &&
+                    termsNumber > workTerms.size() &&
+                    qubitNumber == biMap.getSize();
             }
         public:
         ParityTerm(const xt::xarray<bool>& termsData_, std::vector<bool> flip_, std::vector<int> cfs, const LabelIndexBiMap& biMap_): termsData(termsData_),flips(flip_), biMap(biMap_){
@@ -60,6 +60,10 @@ namespace lq{
         }
 
         ParityTerm(const xt::xarray<bool>& termsData_, const LabelIndexBiMap& biMap_) : termsData(termsData_), biMap(biMap_) {}
+
+        std::set<size_t> getAllTerms() const{
+            return this->workTerms;
+        }
 
         inline bool onWork(const std::set<size_t>& comparedTerms) const{
             return std::includes(this->workTerms.begin(), this->workTerms.end(), comparedTerms.begin(), comparedTerms.end());
@@ -132,10 +136,43 @@ namespace lq{
     };
 
     
-    void phaseNW(ParityTerm B, Graph g){
-        using StackType = std::tuple<std::vector<ParityTerm>, std::set<label>, label>;
+    void phaseNW(ParityTerm pt, Graph g){
+        using StackType = std::tuple<std::set<size_t>, std::set<size_t>, size_t>;
         std::stack<StackType> myStack;
-        // label 
+        // label
+        std::set<size_t> workTerms = pt.getAllTerms();
+        std::set<size_t> livedTerms = pt.getAllTerms();
+        size_t inValid = *workTerms.rbegin() + 1;
+        size_t pivot;
+
+        myStack.push({workTerms,livedTerms,inValid});
+
+        while(!myStack.empty()){
+            auto [workTerms,livedTerms,pivot] = myStack.top();
+            myStack.pop();
+
+            if(pivot != inValid){
+                // do something
+
+            }
+
+            auto [nex_pos, sep] = pt.findOptimal(workTerms,livedTerms);
+            auto [P0,P1] = sep;
+
+            livedTerms.erase(nex_pos);
+            if(!P0.empty()){
+                myStack.push({P0,livedTerms,nex_pos});
+            }
+            if(!P1.empty()){
+                if(pivot==inValid){
+                    myStack.push({P1,livedTerms,pivot});
+                }
+                else{
+                    myStack.push({P1,livedTerms,nex_pos});
+                }
+            }
+
+        }
     }
 }
 
