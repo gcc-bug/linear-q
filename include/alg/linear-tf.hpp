@@ -60,9 +60,9 @@ namespace lq{
                     for(label leaf: T.getLeaves()){
                         if(labelMap.getIndex(leaf) < labelMap.getIndex(r)){
                             auto path = g.findPath({r},{leaf});
-                            Sttree* root = new Sttree(r);
+                            auto root = std::make_shared<Sttree>(r);
                             root->insertChild(g.pathToTree(path));
-                            std::vector<lq::SubTree> temp = {{root,{path.back()}}};
+                            std::vector<lq::SubTree> temp = {SubTree(root,{path.back()})};
                             temp_gates = rowOp(A,temp,signal);
                             res.insert(res.end(),temp_gates.begin(),temp_gates.end());
                         }

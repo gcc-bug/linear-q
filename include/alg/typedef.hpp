@@ -28,10 +28,10 @@ namespace lq{
     class SubTree {
         private:
         // TODO: use unique_ptr instead of pointer
-            Sttree* root;
+            std::shared_ptr<Sttree> root;
             std::set<label> leaves;
         public:
-            SubTree(Sttree* root_, std::set<label> leaves_): root(root_), leaves(leaves_){}
+            SubTree(std::shared_ptr<Sttree> root_, std::set<label> leaves_): root(root_), leaves(leaves_){}
 
             void addLeaf(label leaf){
                 this->leaves.insert(leaf);
@@ -41,7 +41,7 @@ namespace lq{
                 return this->leaves.find(leaf) != this->leaves.end();
             }
 
-            inline Sttree* getRoot(){
+            inline std::shared_ptr<Sttree> getRoot(){
                 return this->root;
             }
 
@@ -55,14 +55,14 @@ namespace lq{
                 }
 
                 std::vector<SubTree> result;
-                std::queue<std::pair<Sttree*, Sttree*>> processingQueue; 
+                std::queue<std::pair<std::shared_ptr<Sttree>, std::shared_ptr<Sttree>>> processingQueue; 
                 processingQueue.push({this->root, nullptr});
 
                 while (!processingQueue.empty()) {
                     auto [currentNode, parentNode] = processingQueue.front();
                     processingQueue.pop();
 
-                    Sttree* newNode = new Sttree(currentNode->getData()); //TODO: Consider using std::unique_ptr for newNode
+                    std::shared_ptr<Sttree> newNode = std::make_shared<Sttree>(currentNode->getData()); //TODO: Consider using std::unique_ptr for newNode
                     if (parentNode != nullptr) {
                         newNode->insertChild(parentNode);
                     }

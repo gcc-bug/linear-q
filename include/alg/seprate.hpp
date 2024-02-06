@@ -11,7 +11,7 @@
 #include "typedef.hpp"
 
 namespace lq{
-    std::vector<SubTree> separate(Sttree* TcS, std::set<label>& terminals, AlgSignal alg) {
+    std::vector<SubTree> separate(std::shared_ptr<Sttree> TcS, std::set<label>& terminals, AlgSignal alg) {
         // alg tag ={1,2,3} for different situation of TF, while tag = 4 only for NW
         if(TcS->getChildren().empty()){
             throw std::invalid_argument("Erruer");
@@ -19,11 +19,11 @@ namespace lq{
         label pivot = TcS->getData();
 
         std::vector<SubTree> T;
-        std::queue<Sttree*> R;
+        std::queue<std::shared_ptr<Sttree>> R;
         R.push(TcS);
         terminals.erase(pivot);
 
-        Sttree* root;
+        std::shared_ptr<Sttree> root;
         // Traverse the Steiner tree in breadth-first search order
         while (!R.empty()) {
             root = R.front();
@@ -31,10 +31,10 @@ namespace lq{
             SubTree T_rootS_root = {root, {} };
 
             // Traverse TcS in BFS order and store vertices and edges
-            std::queue<Sttree*> queue;
+            std::queue<std::shared_ptr<Sttree>> queue;
             queue.push(root);
             while(!queue.empty()){
-                Sttree* currentNode = queue.front();
+                std::shared_ptr<Sttree> currentNode = queue.front();
                 queue.pop();
                 for(auto u: currentNode->getChildren()){
                     if (terminals.find(u->getData())!=terminals.end()) {

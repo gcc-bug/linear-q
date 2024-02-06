@@ -11,7 +11,7 @@
 #include "typedef.hpp"
 
 namespace lq {
-    std::vector<std::pair<label,label>> topDown1(const Sttree* root,const std::set<label>& leaves){
+    std::vector<std::pair<label,label>> topDown1(const std::shared_ptr<Sttree> root,const std::set<label>& leaves){
         if (root == nullptr) return {};
         std::vector<std::pair<label,label>> gates, temp;
 
@@ -26,7 +26,7 @@ namespace lq {
         return gates;
     }
 
-    std::vector<std::pair<label,label>> bottomUp1(const Sttree* root,const std::set<label>& leaves){
+    std::vector<std::pair<label,label>> bottomUp1(const std::shared_ptr<Sttree> root,const std::set<label>& leaves){
         if (root == nullptr) return {};
         std::vector<std::pair<label,label>> gates, temp;
 
@@ -41,7 +41,7 @@ namespace lq {
     }
 
 
-    std::vector<std::pair<label,label>> bottomUp2(const Sttree* root,const std::set<label>& leaves){
+    std::vector<std::pair<label,label>> bottomUp2(const std::shared_ptr<Sttree> root,const std::set<label>& leaves){
         if (root == nullptr) return {};
         std::vector<std::pair<label,label>> gates, temp;
 
@@ -56,7 +56,7 @@ namespace lq {
         return gates;
     }
 
-    std::vector<std::pair<label,label>> topDown2(const Sttree* root,const std::set<label>& leaves){
+    std::vector<std::pair<label,label>> topDown2(const std::shared_ptr<Sttree> root,const std::set<label>& leaves){
         if (root == nullptr) return {};
         std::vector<std::pair<label,label>> gates, temp;
 
@@ -75,7 +75,7 @@ namespace lq {
         std::vector<CNOTGate> res;
         
         for(int i = Ts.size()-1; i >= 0; --i){
-            Sttree* root = Ts.at(i).getRoot();
+            std::shared_ptr<Sttree> root = Ts.at(i).getRoot();
             std::set<label> leaves = Ts.at(i).getLeaves();
             if(alg != AlgSignal::diag){
                 // Bottom Up 1

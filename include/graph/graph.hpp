@@ -195,12 +195,12 @@ public:
         throw std::runtime_error("No path found");
     }
 
-    Sttree* SteinerTree(const label pivot, std::set<label> terminals) const{
+    std::shared_ptr<Sttree> SteinerTree(const label pivot, std::set<label> terminals) const{
         std::vector<label> path;
         std::set<label> start_vertices= {pivot};
-        Sttree* root = new Sttree(pivot);
-        Sttree* current_node;
-        Sttree* next_node;
+        auto root = std::make_shared<Sttree>(pivot);
+        std::shared_ptr<Sttree> current_node;
+        std::shared_ptr<Sttree> next_node;
         try{
             while(!terminals.empty()){
                 path = findPath(start_vertices,terminals);
@@ -218,18 +218,17 @@ public:
         return root;
     }
 
-    Sttree* pathToTree(const std::vector<label>& path) const{
-        // TODO: use std::unique_ptr<Sttree>
+    std::shared_ptr<Sttree> pathToTree(const std::vector<label>& path) const{
         // Check if the path has at least 2 elements
         if (path.size() < 2) {
             return nullptr;
         }
 
-        auto res_node = new Sttree(path[1]); // Start from path[1]
+        auto res_node = std::make_shared<Sttree>(path[1]); // Start from path[1]
         auto current_node = res_node;
 
         for (size_t i = 2; i < path.size(); ++i) {
-            auto next_node = new Sttree(path[i]);
+            auto next_node = std::make_shared<Sttree>(path[i]);
             insertChild(current_node, next_node); 
             current_node = next_node;
         }

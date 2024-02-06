@@ -17,6 +17,7 @@
 #include <queue>
 #include <stdexcept>
 #include <set>
+#include<memory>
 // Helper template to check if a type is printable
 template<typename T, typename = void>
 struct is_printable : std::false_type {};

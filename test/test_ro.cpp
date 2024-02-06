@@ -2,12 +2,12 @@
 #include "alg/seprate.hpp"
 using namespace lq;
 int main(){
-    Sttree* node1 = new Sttree(1);
-    Sttree* node2 = new Sttree(2);
-    Sttree* node3 = new Sttree(3);
-    Sttree* node4 = new Sttree(4);
-    Sttree* node5 = new Sttree(5);
-    Sttree* node6 = new Sttree(6);
+    std::shared_ptr<Sttree> node1 = std::make_shared<Sttree>(1);
+    std::shared_ptr<Sttree> node2 = std::make_shared<Sttree>(2);
+    std::shared_ptr<Sttree> node3 = std::make_shared<Sttree>(3);
+    std::shared_ptr<Sttree> node4 = std::make_shared<Sttree>(4);
+    std::shared_ptr<Sttree> node5 = std::make_shared<Sttree>(5);
+    std::shared_ptr<Sttree> node6 = std::make_shared<Sttree>(6);
 
     insertChild(node1,node2);
     insertChild(node2,node3);
