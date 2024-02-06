@@ -115,11 +115,11 @@ namespace lq {
                     }
                 }   
             }
-            // if(alg==4){
-            //     for(auto leaf: terminals){
-            //         mod2add(A,LabelIndexBiMap.getIndex(root->getData()),LabelIndexBiMap.getIndex(leaf));
-            //     }
-            // }
+            if(alg==AlgSignal::phase){
+                for(auto leaf: Ts.at(i).getLeaves()){
+                    A.mod2add(Ts.at(i).getRoot()->getData(),leaf);
+                }
+            }
         }
         return res;
     }
