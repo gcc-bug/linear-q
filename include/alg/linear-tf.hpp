@@ -30,6 +30,7 @@ namespace lq{
         std::vector<CNOTGate> res;
         label pivot = biMap.getLabel(col);
         std::set<label> terminals = findTerminals(A,col,false);
+        // TODO: if it is need to find terminals after col?
     
         if(terminals.empty()) throw std::runtime_error("erruer");
         auto path = g.findPath({pivot},terminals);
