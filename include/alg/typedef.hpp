@@ -147,7 +147,7 @@ namespace lq{
             LabelIndexBiMap biMap;
 
             bool inline isValid() const{
-                return this->data.dimension() == 2 && data.shape()[1] == biMap.getSize();
+                return this->data.dimension() == 2 && data.shape()[0] == biMap.getSize();
             }
 
         public:
