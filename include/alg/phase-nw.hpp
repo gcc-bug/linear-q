@@ -51,7 +51,7 @@ namespace lq{
                 if(isValidCoeffValue(c)) this->coeffs.push_back(static_cast<Coeffs>(c));
                 else throw std::invalid_argument("Erruer");
             }
-            for (int term = 0; term <= flip_.size(); ++term) {
+            for (int term = 0; term < flip_.size(); ++term) {
                 this->workTerms.insert(term);
             }
         }
@@ -287,16 +287,16 @@ namespace lq{
             std::cout << std::endl;
 
             livedIndexs.erase(nex_pos);
-            if(!P0.empty()){
-                myStack.push({P0,livedIndexs,nex_pos});
-            }
             if(!P1.empty()){
                 if(pos==inValid){
-                    myStack.push({P1,livedIndexs,pos});
-                }
-                else{
                     myStack.push({P1,livedIndexs,nex_pos});
                 }
+                else{
+                    myStack.push({P1,livedIndexs,pos});
+                }
+            }
+            if(!P0.empty()){
+                myStack.push({P0,livedIndexs,pos});
             }
 
         }
