@@ -23,5 +23,9 @@ int main(){
     ParityTerm pt = ParityTerm(B,flips,cs,biMap);
     auto j = pt.findOptimal({0,1,2,3,4,5,6},{0,1,2,3,4,5}).first;
     std::cout << "j: " << j <<std::endl;
+
+    std::cout << pt.getLFmatrix().getData() << std::endl;
+
+    phaseNW(pt,g);
     return 0;
 }
