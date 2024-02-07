@@ -106,7 +106,7 @@ namespace lq{
         auto y1 = processMatrix(A,*g_,AlgSignal::diag);
 
         A.transpose();
-        std::cout << A.getData() << std::endl;
+        // std::cout << A.getData() << std::endl;
         g_ = g->clone();
         auto y2 = processMatrix(A,*g_,AlgSignal::propagated);
         

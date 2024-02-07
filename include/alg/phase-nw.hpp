@@ -67,6 +67,14 @@ namespace lq{
             return this->workTerms;
         }
 
+        std::set<size_t> getAllIndexs() const{
+            std::set<size_t> indexs;
+            for(int i = 0; i < this->biMap.getSize(); i++){
+                indexs.insert(i);
+            }
+            return indexs;
+        }
+
         inline bool onWork(const std::set<size_t>& comparedTerms) const{
             return std::includes(this->workTerms.begin(), this->workTerms.end(), comparedTerms.begin(), comparedTerms.end());
         }
@@ -214,16 +222,17 @@ namespace lq{
         std::stack<StackType> myStack;
         // label
         std::set<size_t> workTerms = pt.getAllTerms();
-        std::set<size_t> livedTerms = pt.getAllTerms();
+        std::set<size_t> livedIndexs = pt.getAllIndexs();
         size_t inValid = *workTerms.rbegin() + 1;
         size_t pos;
 
         AlgSignal alg = AlgSignal::phase;
-        myStack.push({workTerms,livedTerms,inValid});
+        myStack.push({workTerms,livedIndexs,inValid});
 
         while(!myStack.empty()){
-            auto [workTerms,livedTerms,pos] = myStack.top();
+            auto [workTerms,livedIndexs,pos] = myStack.top();
             myStack.pop();
+            std::cout << "-------------\n";
             std::cout << "pos: " <<pos << std::endl;
 
             if(pos != inValid){
@@ -253,7 +262,17 @@ namespace lq{
 
             }
 
-            auto [nex_pos, sep] = pt.findOptimal(workTerms,livedTerms);
+            auto [nex_pos, sep] = pt.findOptimal(workTerms,livedIndexs);
+            std::cout << "work terms:" << std::endl;
+            for(auto p: workTerms){
+                std::cout << p << " ";
+            }
+            std::cout << std::endl;
+            std::cout << "lived terms:" << std::endl;
+            for(auto p: livedIndexs){
+                std::cout << p << " ";
+            }
+            std::cout << std::endl;
             std::cout << "use pos: " << nex_pos << std::endl;
             auto [P0,P1] = sep;
             std::cout << "P0:" << std::endl;
@@ -267,16 +286,16 @@ namespace lq{
             }
             std::cout << std::endl;
 
-            livedTerms.erase(nex_pos);
+            livedIndexs.erase(nex_pos);
             if(!P0.empty()){
-                myStack.push({P0,livedTerms,nex_pos});
+                myStack.push({P0,livedIndexs,nex_pos});
             }
             if(!P1.empty()){
                 if(pos==inValid){
-                    myStack.push({P1,livedTerms,pos});
+                    myStack.push({P1,livedIndexs,pos});
                 }
                 else{
-                    myStack.push({P1,livedTerms,nex_pos});
+                    myStack.push({P1,livedIndexs,nex_pos});
                 }
             }
 

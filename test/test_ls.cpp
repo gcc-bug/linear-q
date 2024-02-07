@@ -21,7 +21,7 @@ int main(){
     LFMatrix A_ = LFMatrix(A,biMap);
     auto Cs = linearSynth(A_,&g);
     std::cout << "use "<<Cs.size() <<" gates" << std::endl;
-    std::cout << std::boolalpha << "good ? " << A_.isGood() << std::endl;
+    std::cout << std::boolalpha << "diag ? " << A_.isGood() << std::endl;
     std::cout << std::boolalpha << "finish ? " << A_.isEye() << std::endl;
     LFMatrix CheckA = LFMatrix(xt::eye(biMap.getSize()),biMap);
     for(auto c: Cs){
@@ -29,6 +29,7 @@ int main(){
         CheckA.CNOT_(ctrl,targ);
     }
     bool res = (CheckA.getData() == A);
-    std::cout << std::boolalpha << res << std::endl;
+    std::cout << CheckA.getData() << std::endl;
+    std::cout << std::boolalpha <<"right ? "<< res << std::endl;
     return 0;
 }
