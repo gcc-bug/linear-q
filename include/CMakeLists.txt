@@ -1,3 +1,5 @@
+set(MQT_CORE_INCLUDE_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/qc-core")
+add_subdirectory(qc-core/src)
 message(STATUS "add submodule")
 find_package(xtensor REQUIRED)
 if(NOT xtensor_FOUND)
@@ -13,6 +15,7 @@ else()
     message(STATUS "xtl include directories: ${xtl_INCLUDE_DIRS}")
 endif()
 
-add_library(graph_lib INTERFACE)
-target_include_directories(graph_lib INTERFACE ${XTENSOR_INCLUDE_DIRS} 
+add_library(${PROJECT_NAME} INTERFACE)
+target_include_directories(${PROJECT_NAME} INTERFACE 
+                                                ${XTENSOR_INCLUDE_DIRS} 
                                                 ${XTL_INCLUDE_DIRS})

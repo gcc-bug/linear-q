@@ -7,6 +7,7 @@ set(TEST_SOURCES
     test_ls.cpp
     test_sp.cpp
     test_pw.cpp
+    test_io.cpp
     # Add new test files here
 )
 
@@ -19,5 +20,5 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
     add_executable(${TEST_NAME} ${TEST_SOURCE})
 
     # Link libraries to each test executable
-    target_link_libraries(${TEST_NAME} graph_lib)
+    target_link_libraries(${TEST_NAME} ${PROJECT_NAME} ${PROJECT_NAME}_core)
 endforeach()
