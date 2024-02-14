@@ -217,7 +217,8 @@ namespace lq{
     };
 
     
-    void phaseNW(ParityTerm& pt, Graph& g){
+    std::vector<CNOTGate> phaseNW(ParityTerm& pt, Graph& g){
+        std::vector<CNOTGate> res;
         using StackType = std::tuple<std::set<size_t>, std::set<size_t>, size_t>;
         std::stack<StackType> myStack;
         // label
@@ -241,10 +242,18 @@ namespace lq{
                 if(!indexs.empty()){
                     auto terminals = pt.getLabel(indexs);
                     label pivot = pt.getLabel(pos);
+                    std::cout << "pivot: " << pivot << std::endl;
+                    std::cout << "terminals:" << std::endl;
+                    for(auto p: terminals){
+                        std::cout << p << " ";
+                    }
+                    std::cout << std::endl;
                     auto st = g.SteinerTree(pivot,terminals);
+                    st->traverse();
                     auto Ts = separate(st,terminals,alg);
                     auto tf = pt.getLFmatrix();
                     auto gates = rowOp(tf,Ts,alg);
+                    res.insert(res.end(),gates.begin(),gates.end());
                     pt.modify(tf.getData());
                     for(auto& gate: gates){
                         gate.assemble(std::cout);
