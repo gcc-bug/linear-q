@@ -10,6 +10,7 @@
 
 #include "Config.hpp"
 #include "tree.hpp"
+#include <limits>
 
 namespace lq{
 class Graph {
