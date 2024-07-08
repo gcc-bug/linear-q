@@ -145,16 +145,29 @@ namespace lq{
             return {max_pos,{P0,P1}};
         }
 
-        bool finish(size_t term) const{
+        /**
+        * @brief Checks if the given term has exactly one truthy value in the termsData array.
+        *
+        * This function iterates through the termsData array to count the number of truthy values
+        * in the specified term column. If there is exactly one truthy value, the function returns true.
+        * If there are zero or more than one truthy values, it returns false.
+        *
+        * @param term The index of the term to be checked.
+        * @return True if the term has exactly one truthy value, false otherwise.
+        */
+        bool finish(size_t term) const {
             int count = 0; 
-            for(size_t pos = 0; pos < this->termsData.shape()[0]; ++pos){
-                if(this->termsData(pos, term)){
+            for (size_t pos = 0; pos < this->termsData.shape()[0]; ++pos) {
+                if (this->termsData(pos, term)) {
                     ++count;
-                    if(count > 1) return false; // Return early if more than one truthy value is found.
+                    // Return early if more than one truthy value is found.
+                    if (count > 1) return false;
                 }
             }
-            return count == 1; 
+            // Return true if exactly one truthy value is found, false otherwise.
+            return count == 1;
         }
+
 
         std::vector<size_t> findFinish() const {
             std::vector<size_t> finishTerms;
@@ -233,8 +246,12 @@ namespace lq{
         while(!myStack.empty()){
             auto [workTerms,livedIndexs,pos] = myStack.top();
             myStack.pop();
+
+            // Debug print statements
             std::cout << "-------------\n";
-            std::cout << "pos: " <<pos << std::endl;
+            std::cout << "pos: " << pos << std::endl;
+            std::cout << "workTerms size: " << workTerms.size() << std::endl;
+            std::cout << "livedIndexs size: " << livedIndexs.size() << std::endl;
 
             if(pos != inValid){
                 auto indexs = pt.findIndexs(workTerms);
@@ -270,7 +287,6 @@ namespace lq{
                 }
 
             }
-
             auto [nex_pos, sep] = pt.findOptimal(workTerms,livedIndexs);
             std::cout << "work terms:" << std::endl;
             for(auto p: workTerms){
@@ -309,6 +325,7 @@ namespace lq{
             }
 
         }
+        return res;
     }
 }
 
